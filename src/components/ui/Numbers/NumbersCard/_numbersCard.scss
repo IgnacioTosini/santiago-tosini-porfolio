@@ -1,0 +1,54 @@
+@use '@/styles/variables' as *;
+
+.numbersCard {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    flex-direction: column;
+    padding: 2rem;
+    width: 100%;
+    max-width: 260px;
+    border-radius: $radius-xl;
+    border: 1px solid rgba($color-border, 0.4);
+    font-family: $font-family-primary;
+    cursor: pointer;
+
+    &:hover {
+        background-color: rgba($color-border, 0.2);
+        transition: background-color 0.3s ease;
+    }
+
+    svg {
+        width: 48px;
+        height: 48px;
+        color: $color-button;
+        background-color: rgba($color-border, 0.4);
+        border-radius: $radius-xl;
+        padding: .75rem;
+    }
+
+    h3 {
+        margin: 1rem 0 0.5rem;
+        color: $color-text-tertiary;
+        font-size: $font-size-xlarge;
+        line-height: 36px;
+    }
+
+    h4 {
+        margin: 0;
+        color: $color-text-primary;
+        font-size: $font-size-small;
+        font-weight: $font-weight-semibold;
+        line-height: 20px;
+    }
+
+    p {
+        margin-top: .5rem;
+        color: $color-text-secondary;
+        font-size: $font-size-xsmall;
+        font-family: $font-family-secondary;
+        max-width: 200px;
+        text-align: center;
+        line-height: 16px;
+    }
+}

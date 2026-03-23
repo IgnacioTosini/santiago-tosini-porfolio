@@ -1,0 +1,59 @@
+// 🎨 Colors
+$color-primary: #0C110E;
+$color-secondary: #F2F0EE;
+$color-accent: #221E1C;
+
+$color-background: linear-gradient(40deg, #0C110E 0%, #0C110E 70%, #0C1C11 100%); // fondo degradado general
+
+$color-button: #24D866;
+$color-button-secondary: #1F1F1F;
+
+$color-border: #1e4d30;
+
+// 📝 Text colors
+$color-text-primary: #ffffff;
+$color-text-secondary: #a7a7a7;
+$color-text-tertiary: #24D866;
+$color-text-quaternary: #141414;
+
+// 🎯 Hover
+$color-hover-primary: #ffffff;
+$color-hover-secondary: #20b456;
+
+// ⚠️ States
+$color-error: #ff4d4f;
+$color-success: #52c41a;
+
+// 🌐 Social
+$color-instagram: #E1306C;
+$color-whatsapp: #25D366;
+
+// 🔤 Fonts
+$font-family-primary: var(--font-inter), system-ui, sans-serif;
+$font-family-secondary: var(--font-space-grotesk), system-ui, serif;
+
+// 📏 Font sizes
+$font-size-xsmall: 12px;
+$font-size-small: 14px;
+$font-size-normal: 16px;
+$font-size-medium: 18px;
+$font-size-large: 24px;
+$font-size-xlarge: 32px;
+$font-size-xxlarge: 40px;
+$font-size-xxxlarge: 60px;
+
+// 🔠 Font weights
+$font-weight-thin: 300;
+$font-weight-regular: 400;
+$font-weight-medium: 500;
+$font-weight-semibold: 600;
+$font-weight-bold: 700;
+$font-weight-extrabold: 800;
+
+// 📦 Border radius
+$radius-xl: 16px;
+$radius-2xl: 5rem;
+
+// 🌫 Shadows
+$shadow-soft: 0 10px 30px rgba(20, 71, 0, 0.05);
+$shadow-card: 0 5px 20px rgba(20, 71, 0, 0.719);

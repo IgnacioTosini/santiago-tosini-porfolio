@@ -1,0 +1,39 @@
+@use '@/styles/variables' as *;
+
+.service {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    min-height: 70dvh;
+    padding: 2.5rem 1.25rem;
+
+    .serviceContainer {
+        display: flex;
+        flex-direction: column;
+        justify-content: center;
+        align-items: center;
+        gap: 2rem;
+        width: 100%;
+        max-width: 1200px;
+
+        .serviceCards {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(530px, 1fr));
+            gap: 2rem;
+            width: 100%;
+
+            @media (max-width: 600px) {
+                grid-template-columns: 1fr;
+            }
+        }
+
+        .serviceDescription {
+            max-width: 600px;
+            text-align: center;
+            color: $color-text-secondary;
+            font-family: $font-family-primary;
+            margin-top: 1.25rem;
+        }
+    }
+}

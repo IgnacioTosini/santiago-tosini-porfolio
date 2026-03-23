@@ -1,0 +1,242 @@
+@use '@/styles/variables' as *;
+
+.hero {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    text-align: center;
+    padding: 4rem 2rem;
+    background: $color-background;
+    min-height: 100dvh;
+
+    .heroContent {
+        display: flex;
+        gap: 5rem;
+        flex-wrap: wrap;
+        max-width: 1200px;
+        padding: 0 1rem;
+
+        @media (max-width: 768px) {
+            gap: 2rem;
+            justify-content: center;
+        }
+
+        .heroContentHeader {
+            display: flex;
+            flex-direction: column;
+            gap: 1rem;
+            max-width: 550px;
+
+            .heroTitleContainer {
+                display: flex;
+                align-items: center;
+                justify-content: flex-start;
+                flex-wrap: wrap;
+                gap: .5rem;
+                color: $color-text-tertiary;
+
+                .heroTitle {
+                    font-family: $font-family-primary;
+                    font-size: clamp($font-size-xsmall, 2.5vw, $font-size-small);
+                    font-weight: $font-weight-medium;
+                    text-transform: uppercase;
+                    letter-spacing: .1em;
+                    line-height: 20px;
+                }
+            }
+
+            .heroSubtitleContainer {
+                display: flex;
+                align-items: center;
+
+                .heroSubtitle {
+                    flex-wrap: wrap;
+
+                    font-family: $font-family-secondary;
+                    font-size: clamp($font-size-xlarge, 5vw, $font-size-xxxlarge);
+                    font-weight: $font-weight-bold;
+                    color: $color-text-secondary;
+                    line-height: 60px;
+                    text-align: start;
+
+                    span {
+                        color: $color-text-tertiary;
+                    }
+                }
+            }
+
+            p {
+                font-family: $font-family-primary;
+                font-size: clamp($font-size-small, 2.5vw, $font-size-medium);
+                color: $color-text-secondary;
+                line-height: 28px;
+                text-align: start;
+            }
+
+            .heroButtons {
+                display: flex;
+                flex-wrap: wrap;
+                gap: 1rem;
+                margin-top: 2rem;
+
+                @media (max-width: 768px) {
+                    justify-content: center;
+                }
+
+                .heroButtonPrimary,
+                .heroButtonSecondary {
+                    display: inline-flex;
+                    align-items: center;
+                    justify-content: center;
+                    padding: .75rem 1.5rem;
+                    font-size: clamp($font-size-small, 2.5vw, $font-size-normal);
+                    font-weight: $font-weight-medium;
+                    gap: .5rem;
+                    text-decoration: none;
+                    transition: all 0.3s ease;
+                    cursor: pointer;
+                    border-radius: $radius-xl;
+                }
+
+                .heroButtonPrimary {
+                    background-color: $color-button;
+                    color: $color-text-quaternary;
+                    font-family: $font-family-primary;
+                    border: none;
+
+                    &:hover {
+                        background-color: lighten($color-hover-secondary, 10%);
+                        box-shadow: $shadow-card;
+                    }
+                }
+
+                .heroButtonSecondary {
+                    background-color: transparent;
+                    color: $color-text-secondary;
+                    padding: .75rem 1.5rem;
+                    font-family: $font-family-primary;
+                    border: 2px solid $color-border;
+                    text-decoration: none;
+
+                    &:hover {
+                        background-color: $color-button-secondary;
+                        color: $color-hover-secondary;
+                        box-shadow: $shadow-card;
+                    }
+                }
+            }
+
+            .numbersDetails {
+                display: flex;
+                align-items: center;
+                flex-wrap: wrap;
+                gap: 2rem;
+                margin-top: 3rem;
+
+                @media (max-width: 768px) {
+                    justify-content: center;
+                }
+
+                .numberDetail {
+                    display: flex;
+                    flex-direction: column;
+                    align-items: center;
+
+                    .number {
+                        font-family: $font-family-primary;
+                        font-size: $font-size-large;
+                        font-weight: $font-weight-bold;
+                        color: $color-text-tertiary;
+                        letter-spacing: .05em;
+                        line-height: 32px;
+                    }
+
+                    .label {
+                        font-family: $font-family-primary;
+                        font-size: $font-size-xsmall;
+                        color: $color-text-secondary;
+                        text-transform: uppercase;
+                        letter-spacing: .05em;
+                        line-height: 16px;
+                    }
+                }
+            }
+        }
+
+        .heroContentFooter {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 2rem;
+            margin-top: 4rem;
+
+            .imageContainer {
+                position: relative;
+                display: flex;
+                align-items: center;
+                max-width: 400px;
+
+                @media (max-width: 768px) {
+                    max-width: 260px;
+                }
+
+                .heroImage {
+                    border-radius: $radius-xl;
+                    box-shadow: $shadow-card;
+                    object-fit: cover;
+                    width: 100%;
+                    max-height: 550px;
+
+                    @media (max-width: 768px) {
+                        max-height: 350px;
+                    }
+                }
+
+                .instagramOverlay {
+                    position: absolute;
+                    bottom: 20px;
+                    left: 20px;
+                    display: flex;
+                    align-items: center;
+                    justify-content: flex-start;
+                    width: 100%;
+                    max-width: clamp(200px, 35dvw, 350px);
+                    background: rgba(0, 0, 0, 0.5);
+                    transition: opacity 0.3s ease;
+                    padding: 1rem;
+                    border-radius: $radius-xl;
+                    border: 1px solid rgba($color-border, 0.7);
+                    backdrop-filter: blur(10px);
+
+                    .icon {
+                        color: $color-instagram;
+                        font-size: 24px;
+                        margin-right: 10px;
+                    }
+
+                    .instagramDetails {
+                        display: flex;
+                        flex-direction: column;
+                        align-items: flex-start;
+                        color: $color-text-primary;
+
+                        .username {
+                            font-family: $font-family-primary;
+                            font-size: $font-size-small;
+                            font-weight: $font-weight-bold;
+                            line-height: 20px;
+                        }
+
+                        .followers {
+                            font-family: $font-family-primary;
+                            font-size: $font-size-xsmall;
+                            font-weight: $font-weight-regular;
+                            line-height: 16px;
+                        }
+                    }
+                }
+            }
+        }
+    }
+}

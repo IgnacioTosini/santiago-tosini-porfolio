@@ -1,0 +1,94 @@
+@use '@/styles/variables' as *;
+
+.footer {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    background: $color-accent;
+    color: $color-text-secondary;
+    text-align: center;
+    padding: 2rem 1rem;
+    border-top: 1px solid $color-border;
+
+    .footerContent {
+        display: flex;
+        justify-content: space-between;
+        flex-wrap: wrap;
+        width: 100%;
+        max-width: 1200px;
+        border-bottom: 1px solid $color-border;
+        padding-bottom: 1rem;
+
+        @media (max-width: 768px) {
+            justify-content: center;
+            gap: 1rem;
+        }
+
+        .footerContentInfo {
+            display: flex;
+            flex-direction: column;
+            align-items: flex-start;
+            gap: 0.5rem;
+            font-family: $font-family-primary;
+            font-size: $font-size-small;
+
+            @media (max-width: 768px) {
+                align-items: center;
+            }
+
+            h1 {
+                margin: 0;
+                font-size: $font-size-medium;
+                font-weight: $font-weight-regular;
+                font-family: $font-family-secondary;
+                line-height: 28px;
+            }
+        }
+
+        .footerContentInfoLinks {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            gap: 0.5rem;
+            font-family: $font-family-primary;
+            font-size: $font-size-small;
+
+            a {
+                display: flex;
+                align-items: center;
+                gap: 0.5rem;
+                color: $color-text-secondary;
+                text-decoration: none;
+                font-size: $font-size-xsmall;
+                font-weight: $font-weight-regular;
+                transition: all .3s ease;
+                letter-spacing: .2em;
+                text-transform: uppercase;
+
+                &:hover {
+                    color: $color-hover-primary;
+                }
+
+                svg {
+                    font-size: $font-size-large;
+                    color: $color-hover-primary;
+                    transition: all .3s ease;
+
+                    &:hover {
+                        color: $color-button;
+                    }
+                }
+            }
+        }
+    }
+
+    .footerContentFooter {
+        margin-top: 1rem;
+
+        p {
+            font-family: $font-family-primary;
+            font-size: $font-size-xsmall;
+            color: $color-text-secondary;
+        }
+    }
+}

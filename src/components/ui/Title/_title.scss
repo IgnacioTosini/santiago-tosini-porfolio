@@ -1,0 +1,18 @@
+@use '@/styles/variables' as *;
+
+.title {
+    text-align: center;
+
+    h1 {
+        width: fit-content;
+        font-size: clamp($font-size-xlarge, 5vw, $font-size-xxlarge);
+        font-weight: $font-weight-bold;
+        color: $color-text-primary;
+        font-family: $font-family-secondary;
+        line-height: 40px;
+    }
+
+    span {
+        color: $color-text-tertiary;
+    }
+}

@@ -1,0 +1,35 @@
+@use '@/styles/variables' as *;
+
+.aboutCard {
+    display: flex;
+    align-items: center;
+    gap: 1rem;
+    padding: 1.5rem;
+    width: 100%;
+    border: 1px solid $color-border;
+    border-radius: $radius-xl;
+    color: $color-text-primary;
+
+    &:hover {
+        background-color: rgba($color-border, 0.2);
+        transition: background-color 0.3s ease;
+        cursor: pointer;
+    }
+
+    svg {
+        width: 38px;
+        height: 38px;
+        color: $color-button;
+        background-color: rgba($color-border, 0.4);
+        border-radius: $radius-xl;
+        padding: 0.5rem;
+    }
+
+    h3 {
+        margin: 0;
+        font-size: $font-size-small;
+        font-family: $font-family-primary;
+        font-weight: $font-weight-medium;
+        line-height: 20px;
+    }
+}

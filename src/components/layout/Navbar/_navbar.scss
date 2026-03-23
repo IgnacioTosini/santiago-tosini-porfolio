@@ -1,0 +1,69 @@
+@use '@/styles/variables' as *;
+
+.navbar {
+    position: sticky;
+    top: 0;
+    left: 0;
+    right: 0;
+    width: 100%;
+    display: flex;
+    justify-content: space-around;
+    align-items: center;
+    padding: 1.5rem 2rem;
+    background-color: rgba($color-primary, 0.8);
+    opacity: 0.95;
+    backdrop-filter: blur(100px);
+    z-index: 1000;
+
+    .navbarBrand {
+        font-family: $font-family-secondary;
+        font-size: $font-size-medium;
+        font-weight: $font-weight-bold;
+        color: $color-text-primary;
+        line-height: 28px;
+        text-decoration: none;
+
+        span {
+            color: $color-text-tertiary;
+        }
+    }
+
+    .navbarLinks {
+        display: flex;
+        gap: 1.5rem;
+
+        .navbarLink {
+            position: relative;
+            font-family: $font-family-primary;
+            font-size: $font-size-small;
+            font-weight: $font-weight-regular;
+            color: $color-text-secondary;
+            text-decoration: none;
+            transition: color 0.3s;
+            line-height: 20px;
+
+            &:hover {
+                color: $color-hover-secondary;
+            }
+
+            &:hover::after,
+            &.active::after {
+                transform: scaleX(1);
+            }
+
+            &.active {
+                color: $color-hover-secondary;
+            }
+        }
+    }
+
+    .hamburgerButton {
+        display: inline-flex;
+        align-items: center;
+        justify-content: center;
+        border: 0;
+        background: transparent;
+        color: $color-text-tertiary;
+        cursor: pointer;
+    }
+}

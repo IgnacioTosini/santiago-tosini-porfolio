@@ -1,0 +1,36 @@
+@use '@/styles/variables' as *;
+
+.audience {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    min-height: 50dvh;
+    padding: 2.5rem 1.25rem;
+
+    .audienceContainer {
+        display: flex;
+        flex-direction: column;
+        justify-content: center;
+        align-items: flex-start;
+        flex-wrap: wrap;
+        gap: 1.25rem;
+        width: 100% ;
+        max-width: 1200px;
+
+        p {
+            max-width: 600px;
+            text-align: center;
+            color: $color-text-primary;
+            font-family: $font-family-primary;
+        }
+
+        .audienceCards {
+            display: flex;
+            justify-content: space-around;
+            flex-wrap: wrap;
+            gap: 1.25rem;
+            width: 100%;
+        }
+    }
+}
