@@ -8,7 +8,7 @@ interface Props {
 export const Title = ({ title, span }: Props) => {
     return (
         <div className="title">
-            <h1>{title} <span>{span}</span></h1>
+            <h1>{title}<span>{span}</span></h1>
         </div>
     )
 }

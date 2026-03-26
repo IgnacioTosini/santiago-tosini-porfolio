@@ -1,20 +1,33 @@
+'use client';
+
 import { Title } from '@/components/ui/Title/Title';
 import { NumbersCard } from '@/components/ui/Numbers/NumbersCard/NumbersCard';
-import { IoPeople } from 'react-icons/io5';
-import { FaEye } from 'react-icons/fa';
-import { FaArrowTrendUp } from 'react-icons/fa6';
-import { ImStatsBars } from 'react-icons/im';
+import { IoLogoTiktok } from 'react-icons/io5';
+import { IoLogoInstagram, IoLogoYoutube } from 'react-icons/io';
+import { useYoutubeData } from '@/hooks/useYoutubeData';
 import './_numbers.scss';
 
 export const Numbers = () => {
+    const { subscriberCount } = useYoutubeData();
+    const youtubeTitle = subscriberCount > 0
+        ? (subscriberCount >= 1000
+            ? `+${(subscriberCount / 1000).toFixed(0)}k`
+            : `+${subscriberCount}`)
+        : '+425k';
+
     return (
         <div className='numbers'>
-            <Title title="En" span="números" />
+            <Title title="Mis redes" span="sociales" />
             <div className="numbersCards">
-                <NumbersCard icon={<IoPeople />} value="100K+" title="Seguidores" label="Comunidad en crecimiento en Instagram" />
-                <NumbersCard icon={<FaEye />} value="50K–300K" title="Views / Reel" label="Rendimiento viral constante" />
-                <NumbersCard icon={<FaArrowTrendUp />} value="Alto" title="Engagement" label="Formatos interactivos que generan conversación" />
-                <NumbersCard icon={<ImStatsBars />} value="500K+" title="Alcance Mensual" label="Alcance orgánico en todo el contenido" />
+                <NumbersCard icon={<IoLogoInstagram />} value="Instagram" title="+105K" label="Seguidores" href='/#instagram' />
+                <NumbersCard icon={<IoLogoTiktok />} value="TikTok" title="+200k" label="Seguidores" href='/#tiktok' />
+                <NumbersCard
+                    icon={<IoLogoYoutube />}
+                    value="YouTube"
+                    title={youtubeTitle}
+                    label="Suscriptores"
+                    href='/#youtube'
+                />
             </div>
         </div>
     )

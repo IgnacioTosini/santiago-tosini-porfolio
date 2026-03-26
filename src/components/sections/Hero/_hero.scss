@@ -1,3 +1,4 @@
+@use 'sass:color';
 @use '@/styles/variables' as *;
 
 .hero {
@@ -9,6 +10,8 @@
     padding: 4rem 2rem;
     background: $color-background;
     min-height: 100dvh;
+    overflow: hidden;
+    z-index: 10;
 
     .heroContent {
         display: flex;
@@ -16,10 +19,35 @@
         flex-wrap: wrap;
         max-width: 1200px;
         padding: 0 1rem;
+        align-items: center;
+        position: relative;
 
         @media (max-width: 768px) {
             gap: 2rem;
             justify-content: center;
+        }
+
+        .footballDecorWrapper {
+            position: absolute;
+            left: -100px;
+            top: 80%;
+            transform: translateY(-50%);
+            opacity: 0.2;
+            overflow: visible;
+            z-index: 2;
+            width: 580px;
+            height: 580px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            z-index: 0;
+
+            @media (max-width: 1024px) {
+                left: -40px;
+                top: 35%;
+                width: 420px;
+                height: 420px;
+            }
         }
 
         .heroContentHeader {
@@ -27,6 +55,8 @@
             flex-direction: column;
             gap: 1rem;
             max-width: 550px;
+            position: relative;
+            z-index: 1;
 
             .heroTitleContainer {
                 display: flex;
@@ -106,7 +136,7 @@
                     border: none;
 
                     &:hover {
-                        background-color: lighten($color-hover-secondary, 10%);
+                        background-color: color.adjust($color-hover-secondary, $lightness: 10%);
                         box-shadow: $shadow-card;
                     }
                 }
@@ -239,4 +269,17 @@
             }
         }
     }
+}
+
+@keyframes floatFootball {
+    0%, 100% {
+        transform: translateY(-50%) translateY(0px);
+    }
+    50% {
+        transform: translateY(-50%) translateY(-12px);
+    }
+}
+
+.footballDecor {
+    animation: floatFootball 4s ease-in-out infinite;
 }

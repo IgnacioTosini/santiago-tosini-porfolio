@@ -4,7 +4,7 @@ export const mediaCardsMock: MediaCardData[] = [
     {
         id: "1",
         title: "Mejores goles - Reacciones de hinchas",
-        coverUrl: "/heroImage.jpg",
+        coverUrl: "/fotoPerfilSantiTosini.jpeg",
         reelUrl: "https://www.youtube.com/watch?v=dQw4w9WgXcQ",
         metrics: {
             views: 150000,
@@ -15,7 +15,7 @@ export const mediaCardsMock: MediaCardData[] = [
     {
         id: "2",
         title: "Desafios en la calle - Pases imposibles",
-        coverUrl: "/heroImage.jpg",
+        coverUrl: "/fotoPerfilSantiTosini.jpeg",
         reelUrl: "https://www.youtube.com/watch?v=dQw4w9WgXcQ",
         metrics: {
             views: 98400,
@@ -25,7 +25,7 @@ export const mediaCardsMock: MediaCardData[] = [
     {
         id: "3",
         title: "Canios y gambetas - Especial fin de semana",
-        coverUrl: "/heroImage.jpg",
+        coverUrl: "/fotoPerfilSantiTosini.jpeg",
         reelUrl: "https://www.youtube.com/watch?v=dQw4w9WgXcQ",
         metrics: {
             views: 207000,

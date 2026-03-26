@@ -4,6 +4,7 @@ import Link from 'next/link';
 import { IoPlayOutline } from 'react-icons/io5';
 import Image from 'next/image';
 import { IoLogoInstagram } from 'react-icons/io';
+import { FootballDecor } from '@/components/decor/FootballDecor';
 import './_hero.scss';
 
 export const Hero = () => {
@@ -19,6 +20,9 @@ export const Hero = () => {
     return (
         <div className="hero">
             <div className="heroContent">
+                {<div className="footballDecorWrapper">
+                    <FootballDecor />
+                </div>}
                 <div className="heroContentHeader">
                     <div className='heroTitleContainer'>
                         <span>—</span> <h1 className="heroTitle"> Creador de Contenido</h1>
@@ -53,7 +57,7 @@ export const Hero = () => {
                 </div>
                 <div className="heroContentFooter">
                     <div className='imageContainer'>
-                        <Image src="/heroImage.jpg" alt="Santi Tosini" width={400} height={650} className='heroImage' />
+                        <Image src="/fotoPerfilSantiTosini.jpeg" alt="Santi Tosini" width={400} height={650} className='heroImage' />
                         <div className='instagramOverlay'>
                             <IoLogoInstagram className='icon' />
                             <div className='instagramDetails'>

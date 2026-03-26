@@ -12,6 +12,7 @@
     border: 1px solid rgba($color-border, 0.4);
     font-family: $font-family-primary;
     cursor: pointer;
+    text-decoration: none;
 
     &:hover {
         background-color: rgba($color-border, 0.2);

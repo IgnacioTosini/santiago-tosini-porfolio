@@ -14,7 +14,7 @@ export const About = () => {
             </div>
             <div className="aboutCards">
                 <AboutCard icon={<FaMapMarkerAlt />} title="Mar del Plata, Argentina" />
-                <AboutCard icon={<FaGraduationCap />} title="Estudiante de Comunicación" />
+                <AboutCard icon={<FaGraduationCap />} title="Licenciado en Comunicación Social" />
                 <AboutCard icon={<FaFire />} title="Fútbol + Entretenimiento" />
             </div>
         </div>

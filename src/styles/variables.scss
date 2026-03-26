@@ -3,30 +3,31 @@ $color-primary: #0C110E;
 $color-secondary: #F2F0EE;
 $color-accent: #221E1C;
 
-$color-background: linear-gradient(40deg, #0C110E 0%, #0C110E 70%, #0C1C11 100%); // fondo degradado general
+$color-background: linear-gradient(40deg, #0C110E 0%, #0C110E 70%, #2b183d 100%); // fondo degradado general
 
-$color-button: #24D866;
+$color-button: #8B5CF6;
 $color-button-secondary: #1F1F1F;
 
-$color-border: #1e4d30;
+$color-border: #5b3a99;
 
 // 📝 Text colors
 $color-text-primary: #ffffff;
 $color-text-secondary: #a7a7a7;
-$color-text-tertiary: #24D866;
+$color-text-tertiary: #A78BFA;
 $color-text-quaternary: #141414;
 
 // 🎯 Hover
 $color-hover-primary: #ffffff;
-$color-hover-secondary: #20b456;
+$color-hover-secondary: #7C3AED;
 
 // ⚠️ States
 $color-error: #ff4d4f;
-$color-success: #52c41a;
+$color-success: #8B5CF6;
 
 // 🌐 Social
 $color-instagram: #E1306C;
-$color-whatsapp: #25D366;
+$color-whatsapp: #7C3AED;
+$color-youtube: #FF0000;
 
 // 🔤 Fonts
 $font-family-primary: var(--font-inter), system-ui, sans-serif;
@@ -55,5 +56,5 @@ $radius-xl: 16px;
 $radius-2xl: 5rem;
 
 // 🌫 Shadows
-$shadow-soft: 0 10px 30px rgba(20, 71, 0, 0.05);
-$shadow-card: 0 5px 20px rgba(20, 71, 0, 0.719);
+$shadow-soft: 0 10px 30px rgba(76, 29, 149, 0.08);
+$shadow-card: 0 5px 20px rgba(76, 29, 149, 0.45);

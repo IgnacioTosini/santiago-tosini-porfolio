@@ -1,3 +1,4 @@
+@use 'sass:color';
 @use '@/styles/variables' as *;
 
 .contact {
@@ -34,6 +35,8 @@
 
         .contactButtons {
             display: flex;
+            justify-content: center;
+            flex-wrap: wrap;
             gap: 1.25rem;
 
             .contactButton {
@@ -54,6 +57,24 @@
                 &:hover {
                     background-color: $color-hover-secondary;
                     color: $color-hover-primary;
+                }
+            }
+
+            .contactInstagram {
+                &:hover {
+                    background-color: color.adjust($color-instagram, $lightness: -10%);
+                }
+            }
+
+            .contactTiktok {
+                &:hover {
+                    background-color: $color-accent;
+                }
+            }
+
+            .contactYoutube {
+                &:hover {
+                    background-color: color.adjust($color-youtube, $lightness: -10%);
                 }
             }
         }

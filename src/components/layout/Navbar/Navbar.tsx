@@ -8,6 +8,7 @@ import { RxHamburgerMenu } from "react-icons/rx";
 import { animateNavbarEntrance } from '@/components/animations/gsap/navbarAnimations';
 import { HamburgerNavbar } from "../HamburgerNavbar/HamburgerNavbar";
 import { IoMdClose } from "react-icons/io";
+import { scrollSection } from '@/utils/scrollSection';
 import "./_navbar.scss";
 
 const navigationItems = [
@@ -56,20 +57,6 @@ export default function Navbar() {
 
     const closeMobileMenu = () => {
         if (isMobile) setIsMenuOpen(false)
-    }
-
-    const scrollSection = (sectionId: string) => {
-        const section = document.getElementById(sectionId)
-        if (!section) return
-
-        const isMobileViewport = window.innerWidth <= 768
-        section.scrollIntoView({ behavior: 'smooth', block: isMobileViewport ? 'start' : 'center' })
-
-        if (sectionId === 'projects') {
-            section.scrollIntoView({ behavior: 'smooth', block: 'start' })
-        }
-
-        window.history.replaceState(null, '', `/#${sectionId}`)
     }
 
     const handleBrandClick = (event: MouseEvent<HTMLAnchorElement>) => {

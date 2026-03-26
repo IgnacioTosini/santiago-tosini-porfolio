@@ -4,6 +4,9 @@
     text-align: center;
 
     h1 {
+        display: flex;
+        justify-content: center;
+        gap: 1rem;
         width: fit-content;
         font-size: clamp($font-size-xlarge, 5vw, $font-size-xxlarge);
         font-weight: $font-weight-bold;
