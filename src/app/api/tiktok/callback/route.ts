@@ -105,17 +105,33 @@ export async function GET(request: Request) {
             );
         }
 
+        const accessToken = parsed.data?.access_token;
+        const refreshToken = parsed.data?.refresh_token;
+
+        if (!accessToken) {
+            return NextResponse.json({
+                success: false,
+                message: 'TikTok respondio OK pero no devolvio access_token. Revisa la respuesta completa.',
+                redirectUri,
+                state,
+                rawTiktokResponse: parsed,
+            }, { status: 500 });
+        }
+
         return NextResponse.json({
             success: true,
-            message: 'Autorizacion TikTok completada. Copia refresh_token a .env.local',
+            message: refreshToken
+                ? 'Autorizacion TikTok completada. Copia REFRESH_TOKEN a .env.local'
+                : 'Autorizacion TikTok completada. Solo se recibio access_token (sin refresh_token). Copia ACCESS_TOKEN temporalmente.',
             redirectUri,
             state,
-            accessToken: parsed.data?.access_token,
-            refreshToken: parsed.data?.refresh_token,
+            accessToken,
+            refreshToken: refreshToken ?? null,
             expiresIn: parsed.data?.expires_in,
             refreshExpiresIn: parsed.data?.refresh_expires_in,
             scope: parsed.data?.scope,
             openId: parsed.data?.open_id,
+            rawTiktokResponse: parsed,
         });
     } catch (exchangeError) {
         return NextResponse.json(
