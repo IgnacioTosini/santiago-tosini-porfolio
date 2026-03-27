@@ -1,20 +1,18 @@
 import { NextResponse } from 'next/server';
 
 type TiktokAuthCodeTokenResponse = {
-    data?: {
-        access_token?: string;
-        refresh_token?: string;
-        open_id?: string;
-        scope?: string;
-        expires_in?: number;
-        refresh_expires_in?: number;
-        token_type?: string;
-    };
-    error?: {
-        code?: string;
-        message?: string;
-        log_id?: string;
-    };
+    // TikTok v2 returns tokens at the root level (not nested under 'data')
+    access_token?: string;
+    refresh_token?: string;
+    open_id?: string;
+    scope?: string;
+    expires_in?: number;
+    refresh_expires_in?: number;
+    token_type?: string;
+    // Error fields (also at root)
+    error?: string;
+    error_description?: string;
+    log_id?: string;
 };
 
 const TIKTOK_TOKEN_URL = 'https://open.tiktokapis.com/v2/oauth/token/';
@@ -91,27 +89,41 @@ export async function GET(request: Request) {
             parsed = null;
         }
 
-        if (!tokenResponse.ok || !parsed || (parsed.error?.code && parsed.error.code !== 'ok')) {
+        if (!parsed) {
             return NextResponse.json(
                 {
                     success: false,
-                    message: 'No se pudo intercambiar el code por tokens.',
+                    message: 'No se pudo parsear la respuesta de TikTok.',
                     status: tokenResponse.status,
                     redirectUri,
                     state,
-                    rawResponse: parsed ?? rawText,
+                    rawResponse: rawText,
                 },
                 { status: 500 },
             );
         }
 
-        const accessToken = parsed.data?.access_token;
-        const refreshToken = parsed.data?.refresh_token;
+        if (parsed.error) {
+            return NextResponse.json(
+                {
+                    success: false,
+                    message: 'TikTok devolvio un error al intercambiar tokens.',
+                    error: parsed.error,
+                    errorDescription: parsed.error_description,
+                    redirectUri,
+                    state,
+                },
+                { status: 400 },
+            );
+        }
+
+        const accessToken = parsed.access_token;
+        const refreshToken = parsed.refresh_token;
 
         if (!accessToken) {
             return NextResponse.json({
                 success: false,
-                message: 'TikTok respondio OK pero no devolvio access_token. Revisa la respuesta completa.',
+                message: 'TikTok respondio OK pero no devolvio access_token.',
                 redirectUri,
                 state,
                 rawTiktokResponse: parsed,
@@ -127,10 +139,10 @@ export async function GET(request: Request) {
             state,
             accessToken,
             refreshToken: refreshToken ?? null,
-            expiresIn: parsed.data?.expires_in,
-            refreshExpiresIn: parsed.data?.refresh_expires_in,
-            scope: parsed.data?.scope,
-            openId: parsed.data?.open_id,
+            expiresIn: parsed.expires_in,
+            refreshExpiresIn: parsed.refresh_expires_in,
+            scope: parsed.scope,
+            openId: parsed.open_id,
             rawTiktokResponse: parsed,
         });
     } catch (exchangeError) {

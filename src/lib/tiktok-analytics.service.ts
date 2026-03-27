@@ -1,20 +1,21 @@
-import { interestData as defaultInterestData } from '@/mocks/interestData.mock';
-
 type AudienceDatum = {
     label: string;
     value: number;
 };
 
 type TiktokTokenResponse = {
-    data?: {
-        access_token?: string;
-        refresh_token?: string;
-        scope?: string;
-    };
-    error?: {
-        code?: string;
-        message?: string;
-    };
+    // TikTok v2 returns tokens at root level
+    access_token?: string;
+    refresh_token?: string;
+    scope?: string;
+    expires_in?: number;
+    refresh_expires_in?: number;
+    open_id?: string;
+    token_type?: string;
+    // Error fields
+    error?: string;
+    error_description?: string;
+    log_id?: string;
 };
 
 type TiktokUserInfoResponse = {
@@ -32,37 +33,34 @@ type TiktokUserInfoResponse = {
     };
 };
 
+type TiktokVideoItem = {
+    id?: string;
+    title?: string;
+    video_description?: string;
+    cover_image_url?: string;
+    share_url?: string;
+    view_count?: number;
+    like_count?: number;
+};
+
+type TiktokVideoListResponse = {
+    data?: {
+        videos?: TiktokVideoItem[];
+    };
+    error?: {
+        code?: string;
+        message?: string;
+    };
+};
+
 const TIKTOK_TOKEN_URL = 'https://open.tiktokapis.com/v2/oauth/token/';
 const TIKTOK_USER_INFO_URL = 'https://open.tiktokapis.com/v2/user/info/';
-
-const TIKTOK_FALLBACK_AGE_DATA: AudienceDatum[] = [
-    { label: '13-17', value: 30 },
-    { label: '18-24', value: 55 },
-    { label: '25+', value: 15 },
-];
-
-const TIKTOK_FALLBACK_GENDER_DATA: AudienceDatum[] = [
-    { label: 'Masculino', value: 75 },
-    { label: 'Femenino', value: 20 },
-    { label: 'No especificado', value: 5 },
-];
-
-const TIKTOK_FALLBACK_LOCATION_DATA: AudienceDatum[] = [
-    { label: 'Argentina', value: 65 },
-    { label: 'México', value: 20 },
-    { label: 'Chile', value: 15 },
-];
-
-const TIKTOK_FALLBACK_TRAFFIC_DATA: AudienceDatum[] = [
-    { label: 'Para ti', value: 60 },
-    { label: 'Siguiendo', value: 25 },
-    { label: 'Perfil', value: 15 },
-];
+const TIKTOK_VIDEO_LIST_URL = 'https://open.tiktokapis.com/v2/video/list/';
 
 const TIKTOK_FALLBACK_PERFORMANCE_DATA: AudienceDatum[] = [
-    { label: 'Seguidores', value: 100000 },
-    { label: 'Me gusta totales', value: 1000000 },
-    { label: 'Videos', value: 500 },
+    { label: 'Seguidores', value: 197233 },
+    { label: 'Me gusta totales', value: 6319226 },
+    { label: 'Videos', value: 783 },
 ];
 
 async function getTiktokAccessToken(): Promise<string | null> {
@@ -94,11 +92,11 @@ async function getTiktokAccessToken(): Promise<string | null> {
 
     const data = (await response.json()) as TiktokTokenResponse;
 
-    if (data.error?.code && data.error.code !== 'ok') {
-        throw new Error(`TikTok token error: ${data.error.code} - ${data.error.message}`);
+    if (data.error) {
+        throw new Error(`TikTok token error: ${data.error} - ${data.error_description}`);
     }
 
-    return data.data?.access_token ?? null;
+    return data.access_token ?? null;
 }
 
 async function fetchTiktokUserInfo(accessToken: string) {
@@ -122,20 +120,90 @@ async function fetchTiktokUserInfo(accessToken: string) {
     return data.data?.user ?? null;
 }
 
-export async function getTiktokAudienceInsights() {
-    const fallbackAgeData = TIKTOK_FALLBACK_AGE_DATA;
-    const fallbackGenderData = TIKTOK_FALLBACK_GENDER_DATA;
-    const fallbackLocationData = TIKTOK_FALLBACK_LOCATION_DATA;
-    const fallbackTrafficData = TIKTOK_FALLBACK_TRAFFIC_DATA;
-    const fallbackPerformanceData = TIKTOK_FALLBACK_PERFORMANCE_DATA;
-    const interestData = defaultInterestData;
+function truncateTiktokTitle(title?: string, description?: string) {
+    const baseText = title?.trim() || description?.trim() || 'TikTok destacado';
 
-    const ageData = fallbackAgeData;
-    const genderData = fallbackGenderData;
-    const locationData = fallbackLocationData;
-    const trafficSourceData = fallbackTrafficData;
-    let performanceData = fallbackPerformanceData;
-    let source: 'live' | 'mixed' | 'fallback' = 'fallback';
+    if (baseText.length <= 60) {
+        return baseText;
+    }
+
+    return `${baseText.slice(0, 57).trimEnd()}...`;
+}
+
+async function fetchTiktokVideos(accessToken: string): Promise<TiktokVideoItem[]> {
+    const fields = [
+        'id',
+        'title',
+        'video_description',
+        'cover_image_url',
+        'share_url',
+        'view_count',
+        'like_count',
+    ].join(',');
+
+    const response = await fetch(`${TIKTOK_VIDEO_LIST_URL}?fields=${fields}`, {
+        method: 'POST',
+        headers: {
+            Authorization: `Bearer ${accessToken}`,
+            'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({
+            max_count: 20,
+        }),
+        cache: 'no-store',
+    });
+
+    if (!response.ok) {
+        const text = await response.text();
+        throw new Error(`TikTok video list API error: ${response.status} ${text}`);
+    }
+
+    const data = (await response.json()) as TiktokVideoListResponse;
+
+    if (data.error?.code && data.error.code !== 'ok') {
+        throw new Error(`TikTok video list error: ${data.error.code} - ${data.error.message}`);
+    }
+
+    return data.data?.videos ?? [];
+}
+
+export async function getTiktokTopVideoCard() {
+    try {
+        const accessToken = await getTiktokAccessToken();
+
+        if (!accessToken) {
+            return null;
+        }
+
+        const videos = await fetchTiktokVideos(accessToken);
+        const topVideo = [...videos]
+            .filter((video) => video.id)
+            .sort((left, right) => (right.view_count ?? 0) - (left.view_count ?? 0))[0];
+
+        if (!topVideo?.id) {
+            return null;
+        }
+
+        return {
+            platform: 'tiktok' as const,
+            id: topVideo.id,
+            title: truncateTiktokTitle(topVideo.title, topVideo.video_description),
+            coverUrl: topVideo.cover_image_url ?? '/fotoPerfilSantiTosini.jpeg',
+            reelUrl: topVideo.share_url ?? 'https://www.tiktok.com/@santiagotosini?lang=es-419',
+            metrics: {
+                views: Math.max(0, Math.round(topVideo.view_count ?? 0)),
+                likes: Math.max(0, Math.round(topVideo.like_count ?? 0)),
+            },
+            isLive: true,
+        };
+    } catch {
+        return null;
+    }
+}
+
+export async function getTiktokPerformanceData() {
+    let performanceData = TIKTOK_FALLBACK_PERFORMANCE_DATA;
+    let source: 'live' | 'fallback' = 'fallback';
     let message: string | undefined;
 
     try {
@@ -143,54 +211,27 @@ export async function getTiktokAudienceInsights() {
 
         if (!accessToken) {
             return {
-                ageData,
-                genderData,
-                locationData,
-                trafficSourceData,
                 performanceData,
-                interestData,
                 source,
-                message:
-                    'Faltan credenciales OAuth para TikTok. Mostrando datos estimados. Configura TIKTOK_CLIENT_KEY, TIKTOK_CLIENT_SECRET y TIKTOK_REFRESH_TOKEN.',
+                message: 'Faltan credenciales OAuth para TikTok.',
             };
         }
 
         const userInfo = await fetchTiktokUserInfo(accessToken);
 
         if (userInfo) {
-            const followerCount = Math.max(0, Math.round(userInfo.follower_count ?? 0));
-            const likesCount = Math.max(0, Math.round(userInfo.likes_count ?? 0));
-            const videoCount = Math.max(0, Math.round(userInfo.video_count ?? 0));
-
             performanceData = [
-                { label: 'Seguidores', value: followerCount },
-                { label: 'Me gusta totales', value: likesCount },
-                { label: 'Videos', value: videoCount },
+                { label: 'Seguidores', value: Math.max(0, Math.round(userInfo.follower_count ?? 0)) },
+                { label: 'Me gusta totales', value: Math.max(0, Math.round(userInfo.likes_count ?? 0)) },
+                { label: 'Videos', value: Math.max(0, Math.round(userInfo.video_count ?? 0)) },
             ];
-
-            source = 'mixed';
-            message =
-                'Estadísticas de cuenta obtenidas en vivo. Demografías (edad, sexo, país, tráfico) requieren TikTok Analytics API con acceso extendido.';
+            source = 'live';
         }
 
-        return {
-            ageData,
-            genderData,
-            locationData,
-            trafficSourceData,
-            performanceData,
-            interestData,
-            source,
-            message,
-        };
+        return { performanceData, source, message };
     } catch (error) {
         return {
-            ageData,
-            genderData,
-            locationData,
-            trafficSourceData,
             performanceData,
-            interestData,
             source,
             message: error instanceof Error ? error.message : 'No se pudo obtener información de TikTok.',
         };

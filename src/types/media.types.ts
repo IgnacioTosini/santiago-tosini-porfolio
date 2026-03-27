@@ -1,9 +1,12 @@
-type MediaMetric = {
+export type MediaMetric = {
     views: number;
     likes: number;
 };
 
+export type SocialPlatform = 'youtube' | 'tiktok' | 'instagram';
+
 export type MediaCardData = {
+    platform: SocialPlatform;
     id: string;
     title: string;
     coverUrl: string;

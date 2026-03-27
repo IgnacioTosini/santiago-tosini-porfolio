@@ -31,6 +31,7 @@ type YoutubeVideoItem = {
 const YOUTUBE_API_BASE = 'https://www.googleapis.com/youtube/v3';
 const API_KEY = process.env.YOUTUBE_API_KEY;
 const CHANNEL_ID = process.env.YOUTUBE_CHANNEL_ID;
+const RECENT_VIDEOS_WINDOW = 25;
 
 if (!API_KEY || !CHANNEL_ID) {
     console.warn(
@@ -156,7 +157,7 @@ async function getRecentVideos(maxResults: number = 5): Promise<YoutubeVideo[]> 
  */
 export async function getYoutubeChannelData(): Promise<YoutubeChannelData> {
     const channelInfo = await getChannelStats();
-    const recentVideos = await getRecentVideos(5);
+    const recentVideos = await getRecentVideos(RECENT_VIDEOS_WINDOW);
 
     return {
         ...channelInfo,

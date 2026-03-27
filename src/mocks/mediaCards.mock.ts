@@ -1,11 +1,14 @@
-import { MediaCardData } from "@/types/media.types";
+import { MediaCardData, SocialPlatform } from "@/types/media.types";
 
-export const mediaCardsMock: MediaCardData[] = [
+const PLATFORM_ORDER: SocialPlatform[] = ["youtube", "tiktok", "instagram"];
+
+const fallbackMediaCards: MediaCardData[] = [
     {
-        id: "1",
-        title: "Mejores goles - Reacciones de hinchas",
+        platform: "youtube",
+        id: "youtube-fallback",
+        title: "YouTube destacado",
         coverUrl: "/fotoPerfilSantiTosini.jpeg",
-        reelUrl: "https://www.youtube.com/watch?v=dQw4w9WgXcQ",
+        reelUrl: "https://www.youtube.com/@santiagotosini",
         metrics: {
             views: 150000,
             likes: 7200,
@@ -13,23 +16,44 @@ export const mediaCardsMock: MediaCardData[] = [
         isLive: true,
     },
     {
-        id: "2",
-        title: "Desafios en la calle - Pases imposibles",
+        platform: "tiktok",
+        id: "tiktok-fallback",
+        title: "TikTok destacado",
         coverUrl: "/fotoPerfilSantiTosini.jpeg",
-        reelUrl: "https://www.youtube.com/watch?v=dQw4w9WgXcQ",
+        reelUrl: "https://www.tiktok.com/@santiagotosini?lang=es-419",
         metrics: {
             views: 98400,
             likes: 5100,
         },
     },
     {
-        id: "3",
-        title: "Canios y gambetas - Especial fin de semana",
+        platform: "instagram",
+        id: "instagram-fallback",
+        title: "Instagram destacado",
         coverUrl: "/fotoPerfilSantiTosini.jpeg",
-        reelUrl: "https://www.youtube.com/watch?v=dQw4w9WgXcQ",
+        reelUrl: "https://www.instagram.com/santii_tosini/",
         metrics: {
             views: 207000,
             likes: 12400,
         },
     },
 ];
+
+export function mediaCardsMock(
+    cards: MediaCardData[] = [],
+): MediaCardData[] {
+    const topCardByPlatform = new Map<SocialPlatform, MediaCardData>();
+
+    for (const card of cards) {
+        const currentTopCard = topCardByPlatform.get(card.platform);
+
+        if (!currentTopCard || card.metrics.views > currentTopCard.metrics.views) {
+            topCardByPlatform.set(card.platform, card);
+        }
+    }
+
+    return PLATFORM_ORDER.map((platform) => {
+        return topCardByPlatform.get(platform)
+            ?? fallbackMediaCards.find((card) => card.platform === platform);
+    }).filter((card): card is MediaCardData => Boolean(card));
+}

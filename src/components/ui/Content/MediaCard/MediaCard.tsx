@@ -7,11 +7,17 @@ type Props = {
 };
 
 export function MediaCard({ item }: Props) {
+    const platformLabel = getPlatformLabel(item.platform);
+
     const cardContent = (
         <>
             <div className="mediaCardVisual">
                 <Image src={item.coverUrl} width={360} height={560} alt={item.title} className="mediaCardImage" />
                 <div className="mediaCardOverlay" />
+
+                <span className={`mediaCardPlatform mediaCardPlatform--${item.platform}`}>
+                    {platformLabel}
+                </span>
 
                 <span className="mediaCardPlay" aria-hidden="true">
                     ▶
@@ -37,7 +43,7 @@ export function MediaCard({ item }: Props) {
                     href={item.reelUrl}
                     target="_blank"
                     rel="noopener noreferrer"
-                    aria-label={`Abrir reel: ${item.title}`}
+                    aria-label={`Abrir contenido de ${platformLabel}: ${item.title}`}
                 >
                     {cardContent}
                 </a>
@@ -50,4 +56,17 @@ export function MediaCard({ item }: Props) {
 
 function formatCompact(value: number) {
     return new Intl.NumberFormat("es-AR", { notation: "compact" }).format(value);
+}
+
+function getPlatformLabel(platform: MediaCardData["platform"]) {
+    switch (platform) {
+        case "youtube":
+            return "YouTube";
+        case "tiktok":
+            return "TikTok";
+        case "instagram":
+            return "Instagram";
+        default:
+            return "Contenido";
+    }
 }

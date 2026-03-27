@@ -1,12 +1,12 @@
 import { NextResponse } from 'next/server';
-import { getTiktokAudienceInsights } from '@/lib/tiktok-analytics.service';
+import { getTiktokPerformanceData } from '@/lib/tiktok-analytics.service';
 
 export async function GET() {
     try {
-        const insights = await getTiktokAudienceInsights();
+        const data = await getTiktokPerformanceData();
         return NextResponse.json({
             success: true,
-            ...insights,
+            ...data,
         });
     } catch (error) {
         return NextResponse.json(
