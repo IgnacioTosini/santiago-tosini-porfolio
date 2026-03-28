@@ -62,14 +62,3 @@ export function stopYoutubeCron() {
         console.log('YouTube cron job stopped');
     }
 }
-
-/**
- * Get cron job status
- */
-export function getYoutubeCronStatus() {
-    return {
-        running: cronJob !== null,
-        schedule: process.env.YOUTUBE_SYNC_CRON || '0 8,20 * * *',
-        timezone: process.env.YOUTUBE_SYNC_TIMEZONE || 'America/Argentina/Buenos_Aires',
-    };
-}

@@ -1,5 +1,11 @@
-export const metadata = {
-    title: 'Términos de Servicio | Santiago Tosini',
+import type { Metadata } from 'next';
+
+export const metadata: Metadata = {
+    title: 'Términos de Servicio',
+    description: 'Términos de servicio del sitio oficial de Santiago Tosini para uso de contenido e integraciones.',
+    alternates: {
+        canonical: '/terms',
+    },
 };
 
 export default function TermsPage() {
@@ -34,7 +40,7 @@ export default function TermsPage() {
 
             <h2>5. Limitación de responsabilidad</h2>
             <p>
-                Este sitio se ofrece "tal cual", sin garantías de disponibilidad ininterrumpida ni de exactitud absoluta
+                Este sitio se ofrece &quot;tal cual&quot;, sin garantías de disponibilidad ininterrumpida ni de exactitud absoluta
                 de la información mostrada.
             </p>
 

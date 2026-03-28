@@ -1,14 +1,13 @@
 'use client';
 
-import React from 'react';
 import Link from 'next/link';
 import { usePathname } from 'next/navigation';
-import { MouseEvent } from 'react';
+import type { MouseEvent, ReactNode } from 'react';
 import { scrollSection } from '@/utils/scrollSection';
 import './_numbersCard.scss';
 
 interface Props {
-    icon: React.ReactNode;
+    icon: ReactNode;
     value: string;
     title: string;
     label: string;

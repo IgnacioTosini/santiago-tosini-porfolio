@@ -1,36 +1,56 @@
-This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
+# Santiago Tosini Portfolio
 
-## Getting Started
+Portfolio en Next.js con App Router para mostrar contenido, métricas sociales y endpoints de integración con YouTube, Instagram y TikTok.
 
-First, run the development server:
+## Scripts
 
 ```bash
 npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-# or
-bun dev
+npm run build
+npm run start
+npm run lint
+npm run type-check
 ```
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+## Variables de entorno
 
-You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
+Definí estas variables en tu entorno local antes de usar las integraciones:
 
-This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
+```bash
+NEXT_PUBLIC_CONTACT_EMAIL=
+YOUTUBE_API_KEY=
+YOUTUBE_CHANNEL_ID=
+YOUTUBE_SYNC_SECRET=
+YOUTUBE_SYNC_CRON=
+YOUTUBE_SYNC_TIMEZONE=
+YOUTUBE_OAUTH_CLIENT_ID=
+YOUTUBE_OAUTH_CLIENT_SECRET=
+YOUTUBE_OAUTH_REFRESH_TOKEN=
+YOUTUBE_ANALYTICS_DAYS=
+INSTAGRAM_ACCESS_TOKEN=
+INSTAGRAM_AUTO_REFRESH=
+TIKTOK_CLIENT_KEY=
+TIKTOK_CLIENT_SECRET=
+TIKTOK_REFRESH_TOKEN=
+```
 
-## Learn More
+## Desarrollo
 
-To learn more about Next.js, take a look at the following resources:
+1. Instalá dependencias con `npm install`.
+2. Configurá las variables de entorno necesarias.
+3. Levantá el proyecto con `npm run dev`.
+4. Abrí `http://localhost:3000`.
 
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
+## Estructura relevante
 
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js) - your feedback and contributions are welcome!
+- `src/app`: páginas App Router y endpoints API.
+- `src/components`: secciones visuales, layout y UI reusable.
+- `src/hooks`: hooks de carga de datos para redes sociales.
+- `src/lib`: servicios de analytics, sincronización y utilidades server-side.
+- `src/mocks`: datos fallback usados cuando una API externa no responde.
 
-## Deploy on Vercel
+## Notas operativas
 
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
-
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.
+- Las métricas de YouTube tienen una ruta de sync manual en `src/app/api/youtube/sync/route.ts` protegida por `YOUTUBE_SYNC_SECRET`.
+- El botón de email de contacto depende de `NEXT_PUBLIC_CONTACT_EMAIL`.
+- Los datos de audiencia usan React Query y muestran fallback cuando una API externa no está disponible.

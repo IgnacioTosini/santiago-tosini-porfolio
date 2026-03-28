@@ -1,5 +1,4 @@
 import { MediaCardData } from '@/types/media.types';
-import { getInstagramTopMediaCard } from '@/lib/instagram-analytics.service';
 import { getTiktokTopVideoCard } from '@/lib/tiktok-analytics.service';
 import { getCachedYoutubeData, getYoutubeChannelData } from '@/lib/youtube.service';
 
@@ -26,9 +25,8 @@ function getYoutubeTopMediaCard(youtubeData: Awaited<ReturnType<typeof getYoutub
 }
 
 export async function getFeaturedMediaCards(): Promise<MediaCardData[]> {
-    const [youtubeResult, instagramResult, tiktokResult] = await Promise.allSettled([
+    const [youtubeResult, tiktokResult] = await Promise.allSettled([
         getCachedYoutubeData().then((cachedData) => cachedData ?? getYoutubeChannelData()),
-        getInstagramTopMediaCard(),
         getTiktokTopVideoCard(),
     ]);
 
@@ -40,10 +38,6 @@ export async function getFeaturedMediaCards(): Promise<MediaCardData[]> {
         if (youtubeCard) {
             cards.push(youtubeCard);
         }
-    }
-
-    if (instagramResult.status === 'fulfilled' && instagramResult.value) {
-        cards.push(instagramResult.value);
     }
 
     if (tiktokResult.status === 'fulfilled' && tiktokResult.value) {

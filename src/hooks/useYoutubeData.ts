@@ -1,5 +1,6 @@
 'use client';
 
+import { SOCIAL_QUERY_GC_TIME_MS, YOUTUBE_INSIGHTS_QUERY_STALE_TIME_MS } from '@/lib/cache';
 import { useQuery } from '@tanstack/react-query';
 import { YoutubeChannelData } from '@/types/youtube.types';
 
@@ -23,9 +24,7 @@ const defaultYoutubeDataState: YoutubeDataState = {
 
 async function fetchYoutubeData(): Promise<YoutubeDataState> {
     try {
-        const response = await fetch('/api/youtube/insights', {
-            cache: 'no-store',
-        });
+        const response = await fetch('/api/youtube/insights');
 
         if (!response.ok) {
             throw new Error(`Failed to fetch YouTube data: ${response.statusText}`);
@@ -59,6 +58,8 @@ export function useYoutubeData() {
     const { data: queryData, isLoading } = useQuery({
         queryKey: ['youtube', 'insights'],
         queryFn: fetchYoutubeData,
+        staleTime: YOUTUBE_INSIGHTS_QUERY_STALE_TIME_MS,
+        gcTime: SOCIAL_QUERY_GC_TIME_MS,
     });
 
     const state = queryData ?? defaultYoutubeDataState;

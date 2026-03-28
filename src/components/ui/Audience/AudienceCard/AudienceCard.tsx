@@ -1,15 +1,14 @@
+import type { AudienceDatum } from '@/types/audience.types';
 import './_audienceCard.scss';
 
 interface Props {
     title: string;
     subtitle: string;
-    data: { label: string; value: number; }[]
+    data: AudienceDatum[];
     valueType?: 'percentage' | 'number';
 }
 
 export const AudienceCard = ({ title, subtitle, data, valueType = 'percentage' }: Props) => {
-    const maxValue = data.reduce((max, item) => Math.max(max, item.value), 0);
-
     return (
         <div id='sym:AudienceCard' className="audienceCard">
             <div className="audienceCardHeader">
@@ -31,9 +30,9 @@ export const AudienceCard = ({ title, subtitle, data, valueType = 'percentage' }
                             <div
                                 className="audienceBarFill"
                                 style={{
-                                    width: `${valueType === 'percentage'
-                                        ? Math.max(0, Math.min(item.value, 100))
-                                        : (maxValue > 0 ? Math.max(0, Math.min((item.value / maxValue) * 100, 100)) : 0)}%`,
+                                    width: valueType === 'percentage'
+                                        ? `${Math.max(0, Math.min(item.value, 100))}%`
+                                        : '100%',
                                 }}
                             />
                         </div>

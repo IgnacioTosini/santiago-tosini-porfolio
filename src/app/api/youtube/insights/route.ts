@@ -1,4 +1,5 @@
 import { NextResponse } from 'next/server';
+import { YOUTUBE_INSIGHTS_CACHE_HEADERS } from '@/lib/cache';
 import { getCachedYoutubeData, getYoutubeChannelData } from '@/lib/youtube.service';
 
 /**
@@ -47,7 +48,7 @@ export async function GET() {
             },
             {
                 headers: {
-                    'Cache-Control': 'public, s-maxage=3600',
+                    ...YOUTUBE_INSIGHTS_CACHE_HEADERS,
                 },
             }
         );

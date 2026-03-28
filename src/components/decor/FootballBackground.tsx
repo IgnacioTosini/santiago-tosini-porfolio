@@ -22,6 +22,7 @@ const BALL_COUNT = 20;
 
 const randomBetween = (min: number, max: number) => Math.random() * (max - min) + min;
 const clamp = (value: number, min: number, max: number) => Math.min(Math.max(value, min), max);
+const createInitialBalls = () => Array.from({ length: BALL_COUNT }, (_, index) => createRandomBall(index));
 
 const createRandomBall = (id: number): FootballBall => {
     const viewportTop = window.scrollY;
@@ -57,7 +58,9 @@ export const FootballBackground = () => {
     const [balls, setBalls] = useState<FootballBall[]>([]);
 
     useEffect(() => {
-        setBalls(Array.from({ length: BALL_COUNT }, (_, index) => createRandomBall(index)));
+        const timeout = window.setTimeout(() => {
+            setBalls(createInitialBalls());
+        }, 0);
 
         const interval = window.setInterval(() => {
             setBalls((previousBalls) => {
@@ -78,7 +81,10 @@ export const FootballBackground = () => {
             });
         }, 1100);
 
-        return () => window.clearInterval(interval);
+        return () => {
+            window.clearTimeout(timeout);
+            window.clearInterval(interval);
+        };
     }, []);
 
     return (

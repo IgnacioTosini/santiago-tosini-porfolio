@@ -1,14 +1,15 @@
 import { NextResponse } from 'next/server';
 import { AUDIENCE_CACHE_HEADERS } from '@/lib/cache';
-import { getTiktokPerformanceData } from '@/lib/tiktok-analytics.service';
+import { getYoutubeAudienceInsights } from '@/lib/youtube-analytics.service';
 
 export async function GET() {
     try {
-        const data = await getTiktokPerformanceData();
+        const insights = await getYoutubeAudienceInsights();
+
         return NextResponse.json(
             {
                 success: true,
-                ...data,
+                ...insights,
             },
             {
                 headers: AUDIENCE_CACHE_HEADERS,

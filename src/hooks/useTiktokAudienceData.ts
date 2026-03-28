@@ -1,11 +1,8 @@
 'use client';
 
+import { AUDIENCE_QUERY_STALE_TIME_MS, SOCIAL_QUERY_GC_TIME_MS } from '@/lib/cache';
+import type { AudienceDatum } from '@/types/audience.types';
 import { useQuery } from '@tanstack/react-query';
-
-type AudienceDatum = {
-    label: string;
-    value: number;
-};
 
 type TiktokPerformanceResponse = {
     success: boolean;
@@ -34,9 +31,7 @@ const defaultTiktokAudienceState: TiktokAudienceState = {
 
 async function fetchTiktokAudienceData(): Promise<TiktokAudienceState> {
     try {
-        const response = await fetch('/api/tiktok/analytics/insights', {
-            cache: 'no-store',
-        });
+        const response = await fetch('/api/tiktok/analytics/insights');
 
         if (!response.ok) {
             throw new Error(`Failed to fetch TikTok data: ${response.statusText}`);
@@ -61,6 +56,8 @@ export function useTiktokAudienceData() {
     const { data, isLoading } = useQuery({
         queryKey: ['audience', 'tiktok'],
         queryFn: fetchTiktokAudienceData,
+        staleTime: AUDIENCE_QUERY_STALE_TIME_MS,
+        gcTime: SOCIAL_QUERY_GC_TIME_MS,
     });
 
     const audienceData = data ?? defaultTiktokAudienceState;

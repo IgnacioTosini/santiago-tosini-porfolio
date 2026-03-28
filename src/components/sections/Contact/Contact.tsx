@@ -10,6 +10,7 @@ import './_contact.scss';
 
 export const Contact = () => {
     const contactRef = useRef<HTMLElement>(null);
+    const contactEmail = process.env.NEXT_PUBLIC_CONTACT_EMAIL;
 
     useEffect(() => {
         if (!contactRef.current) return;
@@ -27,7 +28,18 @@ export const Contact = () => {
                 <Title title={'Creemos algo'} span={'juntos'} />
                 <p className='contactDescription'>Si tu marca quiere llegar a una audiencia apasionada por el fútbol, hablemos.</p>
                 <div className="contactButtons">
-                    <button className='contactButton' onClick={() => window.location.href = 'mailto:example@example.com'}><IoMail /> <span>Email</span></button>
+                    <button
+                        className='contactButton'
+                        disabled={!contactEmail}
+                        onClick={() => {
+                            if (!contactEmail) return;
+                            window.location.href = `mailto:${contactEmail}`;
+                        }}
+                        title={contactEmail ? `Enviar email a ${contactEmail}` : 'Configurá NEXT_PUBLIC_CONTACT_EMAIL para habilitar este botón'}
+                    >
+                        <IoMail />
+                        <span>Email</span>
+                    </button>
                     <button className='contactButton contactInstagram' onClick={() => window.open('https://www.instagram.com/santii_tosini/', '_blank')}>
                         <IoLogoInstagram />
                         Instagram

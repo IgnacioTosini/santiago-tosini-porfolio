@@ -1,12 +1,9 @@
 'use client';
 
+import { AUDIENCE_QUERY_STALE_TIME_MS, SOCIAL_QUERY_GC_TIME_MS } from '@/lib/cache';
 import { instagramAgeData, instagramGenderData, instagramLocationData, instagramPerformanceData } from '@/mocks/instagramData.mock';
+import type { AudienceDatum, AudienceSource } from '@/types/audience.types';
 import { useQuery } from '@tanstack/react-query';
-
-type AudienceDatum = {
-    label: string;
-    value: number;
-};
 
 type InstagramInsightsResponse = {
     success: boolean;
@@ -14,7 +11,7 @@ type InstagramInsightsResponse = {
     genderData: AudienceDatum[];
     locationData: AudienceDatum[];
     performanceData: AudienceDatum[];
-    source: 'live' | 'mixed' | 'fallback';
+    source: AudienceSource;
     message?: string;
 };
 
@@ -23,7 +20,7 @@ type InstagramAudienceState = {
     genderData: AudienceDatum[];
     locationData: AudienceDatum[];
     performanceData: AudienceDatum[];
-    source: 'live' | 'mixed' | 'fallback';
+    source: AudienceSource;
     error: string | null;
 };
 
@@ -38,9 +35,7 @@ const defaultInstagramAudienceState: InstagramAudienceState = {
 
 async function fetchInstagramAudienceData(): Promise<InstagramAudienceState> {
     try {
-        const response = await fetch('/api/instagram/insights', {
-            cache: 'no-store',
-        });
+        const response = await fetch('/api/instagram/insights');
 
         if (!response.ok) {
             throw new Error(`Failed to fetch Instagram data: ${response.statusText}`);
@@ -68,6 +63,8 @@ export function useInstagramAudienceData() {
     const { data, isLoading } = useQuery({
         queryKey: ['audience', 'instagram'],
         queryFn: fetchInstagramAudienceData,
+        staleTime: AUDIENCE_QUERY_STALE_TIME_MS,
+        gcTime: SOCIAL_QUERY_GC_TIME_MS,
     });
 
     const audienceData = data ?? defaultInstagramAudienceState;

@@ -1,9 +1,6 @@
 import { interestData as defaultInterestData } from '@/mocks/interestData.mock';
-
-type AudienceDatum = {
-    label: string;
-    value: number;
-};
+import { getCachedYoutubeData, getYoutubeChannelData } from '@/lib/youtube.service';
+import type { AudienceDatum } from '@/types/audience.types';
 
 type AnalyticsResponse = {
     columnHeaders?: Array<{ name: string }>;
@@ -41,9 +38,9 @@ const YOUTUBE_FALLBACK_TRAFFIC_DATA: AudienceDatum[] = [
 ];
 
 const YOUTUBE_FALLBACK_PERFORMANCE_28D: AudienceDatum[] = [
-    { label: 'Visualizaciones', value: 100 },
-    { label: 'Suscriptores', value: 100 },
-    { label: 'Tiempo de visualizacion', value: 100 },
+    { label: 'Visualizaciones', value: 0 },
+    { label: 'Suscriptores', value: 0 },
+    { label: 'Tiempo de visualizacion', value: 0 },
 ];
 
 async function getAnalyticsAccessToken(): Promise<string | null> {
@@ -242,7 +239,7 @@ export async function getYoutubeAudienceInsights() {
             };
         }
 
-        const { startDate, endDate, days } = getAnalyticsRange();
+        const { startDate, endDate } = getAnalyticsRange();
         const ageGenderParams = new URLSearchParams({
             ids: 'channel==MINE',
             startDate,
@@ -278,14 +275,15 @@ export async function getYoutubeAudienceInsights() {
             ids: 'channel==MINE',
             startDate: last28.startDate,
             endDate: last28.endDate,
-            metrics: 'views,subscribersGained,estimatedMinutesWatched',
+            metrics: 'views,estimatedMinutesWatched',
         });
 
-        const [ageGenderResponse, countryResponse, trafficResponse, currentPerformanceResponse] = await Promise.all([
+        const [ageGenderResponse, countryResponse, trafficResponse, currentPerformanceResponse, channelData] = await Promise.all([
             fetchAnalyticsReport(accessToken, ageGenderParams),
             fetchAnalyticsReport(accessToken, countryParams),
             fetchAnalyticsReport(accessToken, trafficParams),
             fetchAnalyticsReport(accessToken, currentPerformanceParams),
+            getCachedYoutubeData().then((cached) => cached ?? getYoutubeChannelData()),
         ]);
 
         const rows = ageGenderResponse.rows ?? [];
@@ -312,13 +310,6 @@ export async function getYoutubeAudienceInsights() {
                 (genderAccumulator.get(mappedGender) ?? 0) + viewerPercentage
             );
         }
-
-        console.log('[YT Analytics] Raw age groups (unrestricted):',
-            Array.from(rawAgeAccumulator.entries())
-                .sort((a, b) => b[1] - a[1])
-                .map(([ageGroup, value]) => ({ ageGroup, viewerPercentage: Number(value.toFixed(2)) }))
-        );
-        console.log('[YT Analytics] Range config:', { startDate, endDate, days });
 
         const normalizedAge = normalizeYoutubeAgeData(rows, fallbackAgeData);
         const normalizedGender = buildPercentDataFromMap(genderAccumulator, fallbackGenderData, 3);
@@ -356,12 +347,12 @@ export async function getYoutubeAudienceInsights() {
         const currentPerformance = currentPerformanceResponse.rows?.[0] ?? [];
 
         const currentViews = Number(currentPerformance[0] ?? 0);
-        const currentSubscribers = Number(currentPerformance[1] ?? 0);
-        const currentWatchTime = Number(currentPerformance[2] ?? 0);
+        const currentWatchTime = Number(currentPerformance[1] ?? 0);
+        const totalSubscribers = channelData.metrics.subscriberCount;
 
         const literalPerformance28d: AudienceDatum[] = [
             { label: 'Visualizaciones', value: Math.max(0, Math.round(currentViews)) },
-            { label: 'Suscriptores', value: Math.max(0, Math.round(currentSubscribers)) },
+            { label: 'Suscriptores', value: totalSubscribers },
             { label: 'Tiempo de visualizacion', value: Math.max(0, Math.round(currentWatchTime)) },
         ];
 

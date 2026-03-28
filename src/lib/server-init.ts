@@ -5,15 +5,22 @@
 
 import { initYoutubeCron } from './youtube-cron';
 
+type ServerInitGlobal = typeof globalThis & {
+    __santiagoServerInitialized?: boolean;
+};
+
+const serverInitGlobal = globalThis as ServerInitGlobal;
+
 /**
  * Initialize all background jobs and services
  * Call this in your root layout or server component
  */
 export async function initializeServer() {
     // Only initialize cron on server-side and not in static generation
-    if (typeof window === 'undefined') {
+    if (typeof window === 'undefined' && !serverInitGlobal.__santiagoServerInitialized) {
         try {
             initYoutubeCron();
+            serverInitGlobal.__santiagoServerInitialized = true;
         } catch (error) {
             console.error('Failed to initialize server services:', error);
         }

@@ -1,8 +1,8 @@
-import React from 'react';
+import type { ReactNode } from 'react';
 import './_aboutCard.scss';
 
 interface Props {
-    icon: React.ReactNode;
+    icon: ReactNode;
     title: string;
 }
 

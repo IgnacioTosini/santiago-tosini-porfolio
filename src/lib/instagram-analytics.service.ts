@@ -3,6 +3,12 @@ type AudienceDatum = {
     value: number;
 };
 
+type InstagramMediaWithScore = {
+    item: InstagramMediaItem;
+    views: number | null;
+    engagementScore: number;
+};
+
 type InstagramUserResponse = {
     id?: string;
     followers_count?: number;
@@ -71,6 +77,7 @@ type InsightsDemographicsResponse = {
 
 const INSTAGRAM_GRAPH_URL = 'https://graph.instagram.com';
 const INSTAGRAM_MEDIA_LIMIT = 12;
+const INSTAGRAM_TOP_MEDIA_CANDIDATE_LIMIT = 4;
 
 const INSTAGRAM_FALLBACK_PERFORMANCE_DATA: AudienceDatum[] = [
     { label: 'Seguidores', value: 105000 },
@@ -195,6 +202,10 @@ async function fetchInstagramMediaViewCount(accessToken: string, mediaId: string
     return null;
 }
 
+function getInstagramEngagementScore(item: InstagramMediaItem) {
+    return Math.max(0, Math.round(item.like_count ?? 0)) + Math.max(0, Math.round(item.comments_count ?? 0));
+}
+
 export async function getInstagramTopMediaCard() {
     const accessToken = process.env.INSTAGRAM_ACCESS_TOKEN;
 
@@ -220,15 +231,28 @@ export async function getInstagramTopMediaCard() {
             return null;
         }
 
-        const mediaWithViews = await Promise.all(
-            candidateItems.map(async (item) => ({
+        const prioritizedItems = [...candidateItems]
+            .sort((left, right) => getInstagramEngagementScore(right) - getInstagramEngagementScore(left))
+            .slice(0, INSTAGRAM_TOP_MEDIA_CANDIDATE_LIMIT);
+
+        const mediaWithViews: InstagramMediaWithScore[] = await Promise.all(
+            prioritizedItems.map(async (item) => ({
                 item,
                 views: await fetchInstagramMediaViewCount(token, item.id),
+                engagementScore: getInstagramEngagementScore(item),
             })),
         );
 
         const topMedia = mediaWithViews
-            .sort((left, right) => (right.views ?? 0) - (left.views ?? 0))[0];
+            .sort((left, right) => {
+                const viewDelta = (right.views ?? 0) - (left.views ?? 0);
+
+                if (viewDelta !== 0) {
+                    return viewDelta;
+                }
+
+                return right.engagementScore - left.engagementScore;
+            })[0];
 
         if (!topMedia) {
             return null;

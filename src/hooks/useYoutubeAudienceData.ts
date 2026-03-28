@@ -1,11 +1,8 @@
 'use client';
 
+import { AUDIENCE_QUERY_STALE_TIME_MS, SOCIAL_QUERY_GC_TIME_MS } from '@/lib/cache';
+import type { AudienceDatum, AudienceSource } from '@/types/audience.types';
 import { useQuery } from '@tanstack/react-query';
-
-type AudienceDatum = {
-    label: string;
-    value: number;
-};
 
 type AudienceResponse = {
     success: boolean;
@@ -15,7 +12,7 @@ type AudienceResponse = {
     trafficSourceData: AudienceDatum[];
     performance28dData: AudienceDatum[];
     interestData: AudienceDatum[];
-    source: 'live' | 'mixed' | 'fallback';
+    source: AudienceSource;
     message?: string;
 };
 
@@ -25,7 +22,7 @@ type YoutubeAudienceState = {
     locationData: AudienceDatum[];
     trafficSourceData: AudienceDatum[];
     performance28dData: AudienceDatum[];
-    source: 'live' | 'mixed' | 'fallback';
+    source: AudienceSource;
     error: string | null;
     message: string | null;
 };
@@ -55,9 +52,9 @@ const defaultTrafficSourceData: AudienceDatum[] = [
 ];
 
 const defaultPerformance28dData: AudienceDatum[] = [
-    { label: 'Visualizaciones', value: 100 },
-    { label: 'Suscriptores', value: 100 },
-    { label: 'Tiempo de visualizacion', value: 100 },
+    { label: 'Visualizaciones', value: 0 },
+    { label: 'Suscriptores', value: 0 },
+    { label: 'Tiempo de visualizacion', value: 0 },
 ];
 
 const defaultYoutubeAudienceState: YoutubeAudienceState = {
@@ -73,9 +70,7 @@ const defaultYoutubeAudienceState: YoutubeAudienceState = {
 
 async function fetchYoutubeAudienceData(): Promise<YoutubeAudienceState> {
     try {
-        const response = await fetch('/api/youtube/analytics/insights', {
-            cache: 'no-store',
-        });
+        const response = await fetch('/api/youtube/audience');
 
         if (!response.ok) {
             throw new Error(`Failed to fetch YouTube audience: ${response.statusText}`);
@@ -105,6 +100,8 @@ export function useYoutubeAudienceData() {
     const { data, isLoading } = useQuery({
         queryKey: ['audience', 'youtube'],
         queryFn: fetchYoutubeAudienceData,
+        staleTime: AUDIENCE_QUERY_STALE_TIME_MS,
+        gcTime: SOCIAL_QUERY_GC_TIME_MS,
     });
 
     const audienceData = data ?? defaultYoutubeAudienceState;

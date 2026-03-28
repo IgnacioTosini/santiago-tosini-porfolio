@@ -1,5 +1,11 @@
-export const metadata = {
-    title: 'Política de Privacidad | Santiago Tosini',
+import type { Metadata } from 'next';
+
+export const metadata: Metadata = {
+    title: 'Política de Privacidad',
+    description: 'Política de privacidad del sitio oficial de Santiago Tosini y tratamiento de datos de integraciones sociales.',
+    alternates: {
+        canonical: '/privacy',
+    },
 };
 
 export default function PrivacyPage() {
