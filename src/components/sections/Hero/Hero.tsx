@@ -8,6 +8,7 @@ import Image from 'next/image';
 import { IoLogoInstagram } from 'react-icons/io';
 import { animateHeroEntrance, animateHeroParallax } from '@/components/animations/gsap/heroAnimations';
 import { FootballDecor } from '@/components/decor/FootballDecor';
+import { instagramFollowers } from '@/mocks/instagramData.mock';
 import './_hero.scss';
 
 export const Hero = () => {
@@ -78,7 +79,7 @@ export const Hero = () => {
                             <IoLogoInstagram className='icon' />
                             <div className='instagramDetails'>
                                 <p className='username'>@santi.tosini</p>
-                                <p className='followers'>+100K seguidores</p>
+                                <p className='followers'>{instagramFollowers} seguidores</p>
                             </div>
                         </div>
                     </div>

@@ -73,8 +73,8 @@ const INSTAGRAM_GRAPH_URL = 'https://graph.instagram.com';
 const INSTAGRAM_MEDIA_LIMIT = 12;
 
 const INSTAGRAM_FALLBACK_PERFORMANCE_DATA: AudienceDatum[] = [
-    { label: 'Seguidores', value: 0 },
-    { label: 'Publicaciones', value: 0 },
+    { label: 'Seguidores', value: 105000 },
+    { label: 'Publicaciones', value: 1046 },
 ];
 
 const INSTAGRAM_FALLBACK_AGE_DATA: AudienceDatum[] = [

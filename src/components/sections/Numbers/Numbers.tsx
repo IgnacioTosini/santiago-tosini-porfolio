@@ -8,8 +8,8 @@ import { IoLogoTiktok } from 'react-icons/io5';
 import { IoLogoInstagram, IoLogoYoutube } from 'react-icons/io';
 import { useYoutubeData } from '@/hooks/useYoutubeData';
 import { useTiktokAudienceData } from '@/hooks/useTiktokAudienceData';
-import { useInstagramAudienceData } from '@/hooks/useInstagramAudienceData';
 import { animateNumbers } from '@/components/animations/gsap/numbersAnimations';
+import { instagramFollowers } from '@/mocks/instagramData.mock';
 import './_numbers.scss';
 
 export const Numbers = () => {
@@ -27,26 +27,21 @@ export const Numbers = () => {
 
     const { subscriberCount } = useYoutubeData();
     const { performanceData: tiktokPerformanceData } = useTiktokAudienceData();
-    const { performanceData: instagramPerformanceData } = useInstagramAudienceData();
     const youtubeTitle = subscriberCount > 0
         ? (subscriberCount >= 1000
             ? `+${(subscriberCount / 1000).toFixed(0)}k`
             : `+${subscriberCount}`)
         : '+425k';
     const tiktokFollowers = tiktokPerformanceData && tiktokPerformanceData.length > 0
-        ? `${(tiktokPerformanceData[0].value / 1000).toFixed(0)}k`
-        : '200k'; // Valor por defecto si no se pueden cargar los datos de TikTok
-
-    const instagramFollowers = instagramPerformanceData && instagramPerformanceData.length > 0
-        ? `${(instagramPerformanceData[0].value / 1000).toFixed(0)}k`
-        : '105k'; // Valor por defecto si no se pueden cargar los datos de Instagram
+        ? `+${(tiktokPerformanceData[0].value / 1000).toFixed(0)}k`
+        : '+200k'; // Valor por defecto si no se pueden cargar los datos de TikTok
 
     return (
-        <section ref={numbersRef} className='numbers' id='sym:Numbers'>
+        <section ref={numbersRef} className='numbers' id='social'>
             <Title title="Mis redes" span="sociales" />
             <div className="numbersCards">
-                <NumbersCard icon={<IoLogoInstagram />} value="Instagram" title={instagramFollowers ? `+${instagramFollowers}` : '+105k'} label="Seguidores" href='/#instagram' />
-                <NumbersCard icon={<IoLogoTiktok />} value="TikTok" title={tiktokFollowers ? `+${tiktokFollowers}` : '+200k'} label="Seguidores" href='/#tiktok' />
+                <NumbersCard icon={<IoLogoInstagram />} value="Instagram" title={instagramFollowers} label="Seguidores" href='/#instagram' />
+                <NumbersCard icon={<IoLogoTiktok />} value="TikTok" title={tiktokFollowers} label="Seguidores" href='/#tiktok' />
                 <NumbersCard
                     icon={<IoLogoYoutube />}
                     value="YouTube"

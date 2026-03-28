@@ -73,7 +73,7 @@ export const Audience = () => {
     }, [audienceAnimationSeed]);
 
     return (
-        <section ref={audienceRef} className="audience" id='sym:Audience'>
+        <section ref={audienceRef} className="audience" id='social'>
             <section className="audienceContainer" id='instagram'>
                 <Title title={'Ins'} span={'tagram'} />
                 <p>Quiénes miran e interactúan con mi contenido.</p>

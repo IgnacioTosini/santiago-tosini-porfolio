@@ -1,5 +1,6 @@
 'use client';
 
+import { instagramAgeData, instagramGenderData, instagramLocationData, instagramPerformanceData } from '@/mocks/instagramData.mock';
 import { useQuery } from '@tanstack/react-query';
 
 type AudienceDatum = {
@@ -26,34 +27,11 @@ type InstagramAudienceState = {
     error: string | null;
 };
 
-const defaultAgeData: AudienceDatum[] = [
-    { label: '18-24', value: 50 },
-    { label: '25-34', value: 35 },
-    { label: '35+', value: 15 },
-];
-
-const defaultGenderData: AudienceDatum[] = [
-    { label: 'Masculino', value: 72 },
-    { label: 'Femenino', value: 23 },
-    { label: 'No especificado', value: 5 },
-];
-
-const defaultLocationData: AudienceDatum[] = [
-    { label: 'Argentina', value: 68 },
-    { label: 'México', value: 18 },
-    { label: 'Chile', value: 14 },
-];
-
-const defaultPerformanceData: AudienceDatum[] = [
-    { label: 'Seguidores', value: 0 },
-    { label: 'Publicaciones', value: 0 },
-];
-
 const defaultInstagramAudienceState: InstagramAudienceState = {
-    ageData: defaultAgeData,
-    genderData: defaultGenderData,
-    locationData: defaultLocationData,
-    performanceData: defaultPerformanceData,
+    ageData: instagramAgeData,
+    genderData: instagramGenderData,
+    locationData: instagramLocationData,
+    performanceData: instagramPerformanceData,
     source: 'fallback',
     error: null,
 };
@@ -71,10 +49,10 @@ async function fetchInstagramAudienceData(): Promise<InstagramAudienceState> {
         const data = (await response.json()) as InstagramInsightsResponse;
 
         return {
-            ageData: data.ageData ?? defaultAgeData,
-            genderData: data.genderData ?? defaultGenderData,
-            locationData: data.locationData ?? defaultLocationData,
-            performanceData: data.performanceData ?? defaultPerformanceData,
+            ageData: data.ageData ?? instagramAgeData,
+            genderData: data.genderData ?? instagramGenderData,
+            locationData: data.locationData ?? instagramLocationData,
+            performanceData: data.performanceData ?? instagramPerformanceData,
             source: data.source ?? 'fallback',
             error: null,
         };

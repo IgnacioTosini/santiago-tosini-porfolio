@@ -2,8 +2,9 @@
 
 import { useEffect, useRef } from 'react';
 import gsap from 'gsap';
-import { IoLogoInstagram } from 'react-icons/io';
+import { IoLogoInstagram, IoLogoYoutube } from 'react-icons/io';
 import { animateFooter } from '@/components/animations/gsap/footerAnimations';
+import { IoLogoTiktok } from 'react-icons/io5';
 import './_footer.scss';
 
 export default function Footer() {
@@ -27,8 +28,14 @@ export default function Footer() {
         </div>
 
         <div className='footerContentInfoLinks'>
-          <a href="https://www.instagram.com/catalinatorrespiquin/" target="_blank" rel="noopener noreferrer" className='instagramLink'>
+          <a href="https://www.instagram.com/santii_tosini/" target="_blank" rel="noopener noreferrer" className='instagramLink'>
             <IoLogoInstagram />
+          </a>
+          <a href="https://www.youtube.com/@santiagotosini" target="_blank" rel="noopener noreferrer" className='youtubeLink'>
+            <IoLogoYoutube />
+          </a>
+          <a href="https://www.tiktok.com/@santiagotosini?lang=es-419" target="_blank" rel="noopener noreferrer" className='tiktokLink'>
+            <IoLogoTiktok />
           </a>
         </div>
       </div>

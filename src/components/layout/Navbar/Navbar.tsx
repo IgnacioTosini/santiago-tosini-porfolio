@@ -9,14 +9,8 @@ import { animateNavbarEntrance } from '@/components/animations/gsap/navbarAnimat
 import { HamburgerNavbar } from "../HamburgerNavbar/HamburgerNavbar";
 import { IoMdClose } from "react-icons/io";
 import { scrollSection } from '@/utils/scrollSection';
+import { navigationItems } from "@/utils/navigationItems";
 import "./_navbar.scss";
-
-const navigationItems = [
-    { id: 'content', label: 'Contenido' },
-    { id: 'about', label: 'Sobre mí' },
-    { id: 'services', label: 'Servicios' },
-    { id: 'contact', label: 'Contacto' },
-] as const;
 
 export default function Navbar() {
     const pathname = usePathname()

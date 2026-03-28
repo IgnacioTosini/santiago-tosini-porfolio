@@ -5,6 +5,7 @@ import type { MouseEvent } from 'react';
 import Link from 'next/link';
 import gsap from 'gsap';
 import { animateMenuOpen } from '@/components/animations/gsap/hamburgerNavbarAnimations';
+import { navigationItems } from '@/utils/navigationItems';
 import './_hamburgerNavbar.scss';
 
 type HamburgerNavbarProps = {
@@ -13,13 +14,6 @@ type HamburgerNavbarProps = {
     onSectionClick: (event: MouseEvent<HTMLAnchorElement>, sectionId: string) => void;
     activeSection: string;
 };
-
-const navigationItems = [
-    { id: 'content', label: 'Contenido' },
-    { id: 'about', label: 'Sobre mí' },
-    { id: 'services', label: 'Servicios' },
-    { id: 'contact', label: 'Contacto' },
-] as const;
 
 export const HamburgerNavbar = ({ id, isOpen, onSectionClick, activeSection }: HamburgerNavbarProps) => {
     const menuRef = useRef<HTMLDivElement>(null);

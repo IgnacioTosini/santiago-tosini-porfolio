@@ -9,6 +9,12 @@
     padding: 2.5rem 1.25rem;
     min-height: 100dvh;
 
+    .title {
+        h1 {
+            flex-wrap: wrap;
+        }
+    }
+
     .contactContainer {
         display: flex;
         flex-direction: column;
