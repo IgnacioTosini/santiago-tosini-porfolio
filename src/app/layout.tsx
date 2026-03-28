@@ -4,6 +4,7 @@ import Navbar from "@/components/layout/Navbar/Navbar";
 import Footer from "@/components/layout/Footer/Footer";
 import { FootballBackground } from "@/components/decor/FootballBackground";
 import { initializeServer } from "@/lib/server-init";
+import { Providers } from "./providers";
 import "./globals.css";
 
 const inter = Inter({
@@ -34,10 +35,12 @@ export default async function RootLayout({
   return (
     <html lang="es" className={`${inter.variable} ${spaceGrotesk.variable}`}>
       <body>
-        <FootballBackground />
-        <Navbar />
-        {children}
-        <Footer />
+        <Providers>
+          <FootballBackground />
+          <Navbar />
+          {children}
+          <Footer />
+        </Providers>
       </body>
     </html>
   );

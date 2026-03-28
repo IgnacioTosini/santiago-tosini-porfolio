@@ -1,5 +1,7 @@
 'use client';
 
+import { useEffect, useRef } from 'react';
+import gsap from 'gsap';
 import { Title } from '@/components/ui/Title/Title';
 import { NumbersCard } from '@/components/ui/Numbers/NumbersCard/NumbersCard';
 import { IoLogoTiktok } from 'react-icons/io5';
@@ -7,9 +9,22 @@ import { IoLogoInstagram, IoLogoYoutube } from 'react-icons/io';
 import { useYoutubeData } from '@/hooks/useYoutubeData';
 import { useTiktokAudienceData } from '@/hooks/useTiktokAudienceData';
 import { useInstagramAudienceData } from '@/hooks/useInstagramAudienceData';
+import { animateNumbers } from '@/components/animations/gsap/numbersAnimations';
 import './_numbers.scss';
 
 export const Numbers = () => {
+    const numbersRef = useRef<HTMLElement>(null);
+
+    useEffect(() => {
+        if (!numbersRef.current) return;
+
+        const ctx = gsap.context(() => {
+            animateNumbers(numbersRef.current!);
+        }, numbersRef.current);
+
+        return () => ctx.revert();
+    }, []);
+
     const { subscriberCount } = useYoutubeData();
     const { performanceData: tiktokPerformanceData } = useTiktokAudienceData();
     const { performanceData: instagramPerformanceData } = useInstagramAudienceData();
@@ -27,7 +42,7 @@ export const Numbers = () => {
         : '105k'; // Valor por defecto si no se pueden cargar los datos de Instagram
 
     return (
-        <div className='numbers'>
+        <section ref={numbersRef} className='numbers' id='sym:Numbers'>
             <Title title="Mis redes" span="sociales" />
             <div className="numbersCards">
                 <NumbersCard icon={<IoLogoInstagram />} value="Instagram" title={instagramFollowers ? `+${instagramFollowers}` : '+105k'} label="Seguidores" href='/#instagram' />
@@ -40,7 +55,7 @@ export const Numbers = () => {
                     href='/#youtube'
                 />
             </div>
-            <p>Todos los datos son aproximados y pueden variar. El valor de la edad de la audiencia es estimado. Y el mínimo de edad es 13 años. Por favor, verifica los datos directamente en las plataformas correspondientes.</p>
-        </div>
+            <p className='numbersLegal'>Todos los datos son aproximados y pueden variar. El valor de la edad de la audiencia es estimado. Y el mínimo de edad es 13 años. Por favor, verifica los datos directamente en las plataformas correspondientes.</p>
+        </section>
     )
 }

@@ -1,12 +1,29 @@
+"use client";
+
+import { useEffect, useRef } from 'react';
+import gsap from 'gsap';
 import { Title } from '@/components/ui/Title/Title';
 import { FaFire, FaGraduationCap, FaMapMarkerAlt } from 'react-icons/fa';
 import { AboutCard } from '@/components/ui/About/AboutCard/AboutCard';
+import { animateAbout } from '@/components/animations/gsap/aboutAnimations';
 import './_about.scss';
 
 export const About = () => {
+    const aboutRef = useRef<HTMLElement>(null);
+
+    useEffect(() => {
+        if (!aboutRef.current) return;
+
+        const ctx = gsap.context(() => {
+            animateAbout(aboutRef.current!);
+        }, aboutRef.current);
+
+        return () => ctx.revert();
+    }, []);
+
     return (
-        <div className="about" id="about">
-            <div className="aboutContent">
+        <section ref={aboutRef} className="about" id="about">
+            <div className="aboutContent" id="sym:About">
                 <Title title={'Sobre'} span={'mí'} />
                 <p>Soy Santi, creador de contenido de Argentina enfocado en fútbol y entretenimiento.</p>
                 <p>A través de entrevistas callejeras, desafíos y contenido cercano, conecto con una audiencia joven que vive el fútbol todos los días.</p>
@@ -17,6 +34,6 @@ export const About = () => {
                 <AboutCard icon={<FaGraduationCap />} title="Licenciado en Comunicación Social" />
                 <AboutCard icon={<FaFire />} title="Fútbol + Entretenimiento" />
             </div>
-        </div>
+        </section>
     )
 }

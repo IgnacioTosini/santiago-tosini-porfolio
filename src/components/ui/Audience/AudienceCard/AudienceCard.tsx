@@ -11,7 +11,7 @@ export const AudienceCard = ({ title, subtitle, data, valueType = 'percentage' }
     const maxValue = data.reduce((max, item) => Math.max(max, item.value), 0);
 
     return (
-        <div className="audienceCard">
+        <div id='sym:AudienceCard' className="audienceCard">
             <div className="audienceCardHeader">
                 <h3>{title}</h3>
                 <p className='audienceCardSubtitle'>{subtitle}</p>

@@ -1,5 +1,7 @@
 "use client";
 
+import { useEffect, useRef } from 'react';
+import gsap from 'gsap';
 import { AudienceCard } from '@/components/ui/Audience/AudienceCard/AudienceCard';
 import { tiktokAgeData, tiktokGenderData, tiktokLocationData, tiktokTrafficData } from '@/mocks/tiktokData.mock';
 import { instagramInterestData } from '@/mocks/instagramData.mock';
@@ -7,9 +9,12 @@ import { Title } from '@/components/ui/Title/Title';
 import { useYoutubeAudienceData } from '@/hooks/useYoutubeAudienceData';
 import { useTiktokAudienceData } from '@/hooks/useTiktokAudienceData';
 import { useInstagramAudienceData } from '@/hooks/useInstagramAudienceData';
+import { animateAudience } from '@/components/animations/gsap/audienceAnimations';
 import './_audience.scss';
 
 export const Audience = () => {
+    const audienceRef = useRef<HTMLElement>(null);
+
     const {
         ageData: instagramAgeData,
         genderData: instagramGenderData,
@@ -37,8 +42,38 @@ export const Audience = () => {
         error: tiktokError,
     } = useTiktokAudienceData();
 
+    const audienceAnimationSeed = [
+        instagramAgeData.length,
+        instagramGenderData.length,
+        instagramLocationData.length,
+        instagramPerformanceData.length,
+        youtubeAgeData.length,
+        youtubeGenderData.length,
+        youtubeLocationData.length,
+        youtubeTrafficSourceData.length,
+        youtubePerformance28dData.length,
+        tiktokPerformanceData.length,
+        Number(instagramLoading),
+        Number(tiktokLoading),
+        Number(loading),
+        Number(Boolean(instagramError)),
+        Number(Boolean(tiktokError)),
+        Number(Boolean(error)),
+        Number(Boolean(message)),
+    ].join('|');
+
+    useEffect(() => {
+        if (!audienceRef.current) return;
+
+        const ctx = gsap.context(() => {
+            animateAudience(audienceRef.current!);
+        }, audienceRef.current);
+
+        return () => ctx.revert();
+    }, [audienceAnimationSeed]);
+
     return (
-        <div className="audience">
+        <section ref={audienceRef} className="audience" id='sym:Audience'>
             <section className="audienceContainer" id='instagram'>
                 <Title title={'Ins'} span={'tagram'} />
                 <p>Quiénes miran e interactúan con mi contenido.</p>
@@ -79,6 +114,6 @@ export const Audience = () => {
                     <AudienceCard title={'Rendimiento Últimos 28 Días'} subtitle={'Valores reales de los últimos 28 días'} data={youtubePerformance28dData} valueType={'number'} />
                 </div>
             </section>
-        </div>
+        </section>
     );
 };

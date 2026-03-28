@@ -1,6 +1,6 @@
 'use client';
 
-import { useEffect, useState } from 'react';
+import { useQuery } from '@tanstack/react-query';
 
 type AudienceDatum = {
     label: string;
@@ -14,50 +14,61 @@ type TiktokPerformanceResponse = {
     message?: string;
 };
 
+type TiktokAudienceState = {
+    performanceData: AudienceDatum[];
+    source: 'live' | 'fallback';
+    error: string | null;
+};
+
 const defaultPerformanceData: AudienceDatum[] = [
     { label: 'Seguidores', value: 197233 },
     { label: 'Me gusta totales', value: 6319226 },
     { label: 'Videos', value: 783 },
 ];
 
-export function useTiktokAudienceData() {
-    const [performanceData, setPerformanceData] = useState<AudienceDatum[]>(defaultPerformanceData);
-    const [source, setSource] = useState<'live' | 'fallback'>('fallback');
-    const [loading, setLoading] = useState(true);
-    const [error, setError] = useState<string | null>(null);
+const defaultTiktokAudienceState: TiktokAudienceState = {
+    performanceData: defaultPerformanceData,
+    source: 'fallback',
+    error: null,
+};
 
-    useEffect(() => {
-        const fetchInsights = async () => {
-            try {
-                setLoading(true);
-                const response = await fetch('/api/tiktok/analytics/insights', {
-                    cache: 'no-store',
-                });
+async function fetchTiktokAudienceData(): Promise<TiktokAudienceState> {
+    try {
+        const response = await fetch('/api/tiktok/analytics/insights', {
+            cache: 'no-store',
+        });
 
-                if (!response.ok) {
-                    throw new Error(`Failed to fetch TikTok data: ${response.statusText}`);
-                }
+        if (!response.ok) {
+            throw new Error(`Failed to fetch TikTok data: ${response.statusText}`);
+        }
 
-                const data = (await response.json()) as TiktokPerformanceResponse;
-                setPerformanceData(data.performanceData ?? defaultPerformanceData);
-                setSource(data.source ?? 'fallback');
-                setError(null);
-            } catch (err) {
-                setError(err instanceof Error ? err.message : 'Unknown error');
-                setPerformanceData(defaultPerformanceData);
-                setSource('fallback');
-            } finally {
-                setLoading(false);
-            }
+        const data = (await response.json()) as TiktokPerformanceResponse;
+
+        return {
+            performanceData: data.performanceData ?? defaultPerformanceData,
+            source: data.source ?? 'fallback',
+            error: null,
         };
+    } catch (err) {
+        return {
+            ...defaultTiktokAudienceState,
+            error: err instanceof Error ? err.message : 'Unknown error',
+        };
+    }
+}
 
-        fetchInsights();
-    }, []);
+export function useTiktokAudienceData() {
+    const { data, isLoading } = useQuery({
+        queryKey: ['audience', 'tiktok'],
+        queryFn: fetchTiktokAudienceData,
+    });
+
+    const audienceData = data ?? defaultTiktokAudienceState;
 
     return {
-        performanceData,
-        source,
-        loading,
-        error,
+        performanceData: audienceData.performanceData,
+        source: audienceData.source,
+        loading: isLoading,
+        error: audienceData.error,
     };
 }

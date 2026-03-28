@@ -89,18 +89,48 @@ export default function Navbar() {
 
         if (sectionElements.length === 0) return
 
-        const observer = new IntersectionObserver(
-            (entries) => {
-                const visibleSections = entries
-                    .filter((entry) => entry.isIntersecting)
-                    .sort((a, b) => Math.abs(a.boundingClientRect.top) - Math.abs(b.boundingClientRect.top))
-                if (visibleSections.length > 0) setActiveSection(visibleSections[0].target.id)
-            },
-            { root: null, threshold: [0.2, 0.35, 0.5, 0.7], rootMargin: '-18% 0px -48% 0px' }
-        )
+        const updateActiveSection = () => {
+            const markerRatio = window.innerWidth <= 768 ? 0.2 : 0.35
+            const markerViewportY = window.innerHeight * markerRatio
+            const markerDocumentY = window.scrollY + markerViewportY
+            const sectionTops = sectionElements.map((section) => section.getBoundingClientRect().top + window.scrollY)
+            const firstSectionTop = sectionTops[0]
 
-        sectionElements.forEach((section) => observer.observe(section))
-        return () => observer.disconnect()
+            // While hero is the main visible area, keep every nav label inactive.
+            if (markerDocumentY < firstSectionTop) {
+                setActiveSection('')
+                return
+            }
+
+            // Pick the last section whose top is above the marker line.
+            const currentIndex = sectionTops.reduce((activeIndex, top, index) => {
+                if (markerDocumentY >= top) return index
+                return activeIndex
+            }, 0)
+
+            const current = sectionElements[currentIndex]
+
+            if (current) {
+                setActiveSection(current.id)
+                return
+            }
+
+            // Fallback for edge cases near section boundaries.
+            const nearest = [...sectionElements].sort(
+                (a, b) => Math.abs(a.getBoundingClientRect().top - markerViewportY) - Math.abs(b.getBoundingClientRect().top - markerViewportY)
+            )[0]
+
+            setActiveSection(nearest?.id ?? '')
+        }
+
+        updateActiveSection()
+        window.addEventListener('scroll', updateActiveSection, { passive: true })
+        window.addEventListener('resize', updateActiveSection)
+
+        return () => {
+            window.removeEventListener('scroll', updateActiveSection)
+            window.removeEventListener('resize', updateActiveSection)
+        }
     }, [pathname])
 
     return (

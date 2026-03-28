@@ -1,57 +1,74 @@
 'use client';
 
-import { useEffect, useState } from 'react';
+import { useQuery } from '@tanstack/react-query';
 import { YoutubeChannelData } from '@/types/youtube.types';
 
-export function useYoutubeData() {
-    const [data, setData] = useState<YoutubeChannelData | null>(null);
-    const [loading, setLoading] = useState(true);
-    const [error, setError] = useState<string | null>(null);
-    const [lastSynced, setLastSynced] = useState<string | null>(null);
+type YoutubeInsightsResponse = {
+    success?: boolean;
+    data?: YoutubeChannelData;
+    lastSyncedAt?: string;
+};
 
-    useEffect(() => {
-        const fetchYoutubeData = async () => {
-            try {
-                setLoading(true);
-                const response = await fetch('/api/youtube/insights');
+type YoutubeDataState = {
+    data: YoutubeChannelData | null;
+    error: string | null;
+    lastSynced: string | null;
+};
 
-                if (!response.ok) {
-                    throw new Error(
-                        `Failed to fetch YouTube data: ${response.statusText}`
-                    );
-                }
+const defaultYoutubeDataState: YoutubeDataState = {
+    data: null,
+    error: null,
+    lastSynced: null,
+};
 
-                const result = await response.json();
+async function fetchYoutubeData(): Promise<YoutubeDataState> {
+    try {
+        const response = await fetch('/api/youtube/insights', {
+            cache: 'no-store',
+        });
 
-                if (result.data) {
-                    setData(result.data);
-                    setLastSynced(result.lastSyncedAt);
-                    setError(null);
-                } else {
-                    setError('No YouTube data available');
-                }
-            } catch (err) {
-                const errorMessage = err instanceof Error ? err.message : 'Unknown error';
-                setError(errorMessage);
-                console.error('Failed to fetch YouTube data:', err);
-            } finally {
-                setLoading(false);
-            }
+        if (!response.ok) {
+            throw new Error(`Failed to fetch YouTube data: ${response.statusText}`);
+        }
+
+        const result = (await response.json()) as YoutubeInsightsResponse;
+
+        if (!result.data) {
+            return {
+                ...defaultYoutubeDataState,
+                error: 'No YouTube data available',
+            };
+        }
+
+        return {
+            data: result.data,
+            lastSynced: result.lastSyncedAt ?? result.data.lastSyncedAt,
+            error: null,
         };
+    } catch (err) {
+        const errorMessage = err instanceof Error ? err.message : 'Unknown error';
+        console.error('Failed to fetch YouTube data:', err);
+        return {
+            ...defaultYoutubeDataState,
+            error: errorMessage,
+        };
+    }
+}
 
-        fetchYoutubeData();
+export function useYoutubeData() {
+    const { data: queryData, isLoading } = useQuery({
+        queryKey: ['youtube', 'insights'],
+        queryFn: fetchYoutubeData,
+    });
 
-        // Refresh every 30 minutes
-        const interval = setInterval(fetchYoutubeData, 30 * 60 * 1000);
-
-        return () => clearInterval(interval);
-    }, []);
+    const state = queryData ?? defaultYoutubeDataState;
+    const data = state.data;
 
     return {
         data,
-        loading,
-        error,
-        lastSynced,
+        loading: isLoading,
+        error: state.error,
+        lastSynced: state.lastSynced,
         subscriberCount: data?.metrics.subscriberCount ?? 0,
         totalViews: data?.metrics.viewCount ?? 0,
         videoCount: data?.metrics.videoCount ?? 0,

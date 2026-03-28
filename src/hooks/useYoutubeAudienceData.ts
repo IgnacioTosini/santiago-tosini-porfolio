@@ -1,6 +1,6 @@
 'use client';
 
-import { useEffect, useState } from 'react';
+import { useQuery } from '@tanstack/react-query';
 
 type AudienceDatum = {
     label: string;
@@ -17,6 +17,17 @@ type AudienceResponse = {
     interestData: AudienceDatum[];
     source: 'live' | 'mixed' | 'fallback';
     message?: string;
+};
+
+type YoutubeAudienceState = {
+    ageData: AudienceDatum[];
+    genderData: AudienceDatum[];
+    locationData: AudienceDatum[];
+    trafficSourceData: AudienceDatum[];
+    performance28dData: AudienceDatum[];
+    source: 'live' | 'mixed' | 'fallback';
+    error: string | null;
+    message: string | null;
 };
 
 const defaultAgeData: AudienceDatum[] = [
@@ -49,64 +60,64 @@ const defaultPerformance28dData: AudienceDatum[] = [
     { label: 'Tiempo de visualizacion', value: 100 },
 ];
 
-export function useYoutubeAudienceData() {
-    const [ageData, setAgeData] = useState<AudienceDatum[]>(defaultAgeData);
-    const [genderData, setGenderData] = useState<AudienceDatum[]>(defaultGenderData);
-    const [locationData, setLocationData] = useState<AudienceDatum[]>(defaultLocationData);
-    const [trafficSourceData, setTrafficSourceData] = useState<AudienceDatum[]>(defaultTrafficSourceData);
-    const [performance28dData, setPerformance28dData] = useState<AudienceDatum[]>(defaultPerformance28dData);
-    const [source, setSource] = useState<'live' | 'mixed' | 'fallback'>('fallback');
-    const [loading, setLoading] = useState(true);
-    const [error, setError] = useState<string | null>(null);
-    const [message, setMessage] = useState<string | null>(null);
+const defaultYoutubeAudienceState: YoutubeAudienceState = {
+    ageData: defaultAgeData,
+    genderData: defaultGenderData,
+    locationData: defaultLocationData,
+    trafficSourceData: defaultTrafficSourceData,
+    performance28dData: defaultPerformance28dData,
+    source: 'fallback',
+    error: null,
+    message: null,
+};
 
-    useEffect(() => {
-        const fetchInsights = async () => {
-            try {
-                setLoading(true);
-                const response = await fetch('/api/youtube/analytics/insights', {
-                    cache: 'no-store',
-                });
+async function fetchYoutubeAudienceData(): Promise<YoutubeAudienceState> {
+    try {
+        const response = await fetch('/api/youtube/analytics/insights', {
+            cache: 'no-store',
+        });
 
-                if (!response.ok) {
-                    throw new Error(`Failed to fetch YouTube audience: ${response.statusText}`);
-                }
+        if (!response.ok) {
+            throw new Error(`Failed to fetch YouTube audience: ${response.statusText}`);
+        }
 
-                const data = (await response.json()) as AudienceResponse;
-                setAgeData(data.ageData ?? defaultAgeData);
-                setGenderData(data.genderData ?? defaultGenderData);
-                setLocationData(data.locationData ?? defaultLocationData);
-                setTrafficSourceData(data.trafficSourceData ?? defaultTrafficSourceData);
-                setPerformance28dData(data.performance28dData ?? defaultPerformance28dData);
-                setSource(data.source ?? 'fallback');
-                setMessage(data.message ?? null);
-                setError(data.source === 'fallback' ? (data.message ?? 'No se pudieron cargar métricas en vivo.') : null);
-            } catch (err) {
-                setError(err instanceof Error ? err.message : 'Unknown error');
-                setMessage(null);
-                setAgeData(defaultAgeData);
-                setGenderData(defaultGenderData);
-                setLocationData(defaultLocationData);
-                setTrafficSourceData(defaultTrafficSourceData);
-                setPerformance28dData(defaultPerformance28dData);
-                setSource('fallback');
-            } finally {
-                setLoading(false);
-            }
+        const data = (await response.json()) as AudienceResponse;
+
+        return {
+            ageData: data.ageData ?? defaultAgeData,
+            genderData: data.genderData ?? defaultGenderData,
+            locationData: data.locationData ?? defaultLocationData,
+            trafficSourceData: data.trafficSourceData ?? defaultTrafficSourceData,
+            performance28dData: data.performance28dData ?? defaultPerformance28dData,
+            source: data.source ?? 'fallback',
+            message: data.message ?? null,
+            error: data.source === 'fallback' ? (data.message ?? 'No se pudieron cargar métricas en vivo.') : null,
         };
+    } catch (err) {
+        return {
+            ...defaultYoutubeAudienceState,
+            error: err instanceof Error ? err.message : 'Unknown error',
+        };
+    }
+}
 
-        fetchInsights();
-    }, []);
+export function useYoutubeAudienceData() {
+    const { data, isLoading } = useQuery({
+        queryKey: ['audience', 'youtube'],
+        queryFn: fetchYoutubeAudienceData,
+    });
+
+    const audienceData = data ?? defaultYoutubeAudienceState;
 
     return {
-        ageData,
-        genderData,
-        locationData,
-        trafficSourceData,
-        performance28dData,
-        source,
-        loading,
-        error,
-        message,
+        ageData: audienceData.ageData,
+        genderData: audienceData.genderData,
+        locationData: audienceData.locationData,
+        trafficSourceData: audienceData.trafficSourceData,
+        performance28dData: audienceData.performance28dData,
+        source: audienceData.source,
+        loading: isLoading,
+        error: audienceData.error,
+        message: audienceData.message,
     };
 }

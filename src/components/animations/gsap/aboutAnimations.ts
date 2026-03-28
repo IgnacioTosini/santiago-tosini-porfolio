@@ -1,46 +1,88 @@
 import gsap from 'gsap';
 import { ScrollTrigger } from 'gsap/ScrollTrigger';
 
-const ease = 'power3.out';
+const ease = 'power4.out';
 
 export function animateAbout(container: HTMLElement): void {
     gsap.registerPlugin(ScrollTrigger);
     const pref = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+    const trigger = container.querySelector<HTMLElement>('#sym\\:About') ?? container;
 
-    const image      = container.querySelector<HTMLElement>('.aboutSectionImage');
-    const paragraphs = Array.from(container.querySelectorAll<HTMLElement>('.aboutSectionText p'));
-    const highlights = Array.from(container.querySelectorAll<HTMLElement>('.highlight'));
+    const title = container.querySelector<HTMLElement>('#sym\\:About .title h1');
+    const paragraphs = Array.from(container.querySelectorAll<HTMLElement>('#sym\\:About p'));
+    const cards = Array.from(container.querySelectorAll<HTMLElement>('.aboutCards .aboutCard'));
+    const icons = Array.from(container.querySelectorAll<HTMLElement>('.aboutCards .aboutCard svg'));
+
+    const all = [title, ...paragraphs, ...cards, ...icons].filter((el): el is HTMLElement => !!el);
 
     if (pref) {
-        const all = [image, ...paragraphs, ...highlights].filter((el): el is HTMLElement => !!el);
-        gsap.set(all, { opacity: 1, x: 0, y: 0, scale: 1, clipPath: 'inset(0% 0% 0% 0%)' });
+        gsap.set(all, { clearProps: 'all' });
         return;
     }
 
+    gsap.set(container, { perspective: 1200 });
+
     const tl = gsap.timeline({
         scrollTrigger: {
-            trigger: container,
+            trigger,
             start: 'top 80%',
-            toggleActions: 'play none none none',
+            toggleActions: 'play none none reverse',
         },
+        defaults: { ease },
     });
 
-    if (image) {
-        tl.fromTo(
-            image,
-            { opacity: 0, scale: 1.08, clipPath: 'inset(8% 0% 14% 0%)' },
-            { opacity: 1, scale: 1,    clipPath: 'inset(0% 0% 0% 0%)', duration: 0.9, ease },
-        );
+    if (title) {
+        tl.from(title, {
+            autoAlpha: 0,
+            y: 34,
+            scale: 0.96,
+            transformOrigin: 'left center',
+            duration: 0.8,
+        });
     }
 
     paragraphs.forEach((p, i) => {
-        tl.from(p, { opacity: 0, x: 24 + i * 8, y: 24 - i * 2, duration: 0.64 + i * 0.04, ease },
-            i === 0 ? '-=0.3' : '-=0.4');
+        tl.from(
+            p,
+            {
+                autoAlpha: 0,
+                x: 20 + i * 5,
+                y: 18,
+                duration: 0.56 + i * 0.05,
+            },
+            i === 0 ? '-=0.46' : '-=0.36',
+        );
     });
 
-    const xOffsets = [-18, 0, 18];
-    highlights.forEach((li, i) => {
-        tl.from(li, { opacity: 0, x: xOffsets[i] ?? 0, y: 18, duration: 0.56, ease },
-            i === 0 ? '-=0.2' : '-=0.35');
-    });
+    if (cards.length > 0) {
+        tl.from(
+            cards,
+            {
+                autoAlpha: 0,
+                y: 30,
+                rotateX: -10,
+                scale: 0.96,
+                transformOrigin: 'center bottom',
+                duration: 0.62,
+                stagger: 0.12,
+            },
+            '-=0.26',
+        );
+    }
+
+    if (icons.length > 0) {
+        tl.from(
+            icons,
+            {
+                autoAlpha: 0,
+                scale: 0.7,
+                rotate: -12,
+                transformOrigin: 'center center',
+                duration: 0.45,
+                ease: 'back.out(1.8)',
+                stagger: 0.08,
+            },
+            '-=0.45',
+        );
+    }
 }

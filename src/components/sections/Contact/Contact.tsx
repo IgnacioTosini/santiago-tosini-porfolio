@@ -1,14 +1,29 @@
 'use client';
 
+import { useEffect, useRef } from 'react';
+import gsap from 'gsap';
 import { Title } from '@/components/ui/Title/Title';
 import { IoLogoTiktok, IoMail } from 'react-icons/io5';
 import { IoLogoInstagram, IoLogoYoutube } from 'react-icons/io';
+import { animateContact } from '@/components/animations/gsap/contactAnimations';
 import './_contact.scss';
 
 export const Contact = () => {
+    const contactRef = useRef<HTMLElement>(null);
+
+    useEffect(() => {
+        if (!contactRef.current) return;
+
+        const ctx = gsap.context(() => {
+            animateContact(contactRef.current!);
+        }, contactRef.current);
+
+        return () => ctx.revert();
+    }, []);
+
     return (
-        <div className="contact" id="contact">
-            <div className="contactContainer">
+        <section ref={contactRef} className="contact" id="contact">
+            <div className="contactContainer" id='sym:Contact'>
                 <Title title={'Creemos algo'} span={'juntos'} />
                 <p className='contactDescription'>Si tu marca quiere llegar a una audiencia apasionada por el fútbol, hablemos.</p>
                 <div className="contactButtons">
@@ -27,6 +42,6 @@ export const Contact = () => {
                     </button>
                 </div>
             </div>
-        </div>
+        </section>
     )
 }

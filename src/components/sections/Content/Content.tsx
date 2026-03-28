@@ -2,6 +2,7 @@ import { Title } from '@/components/ui/Title/Title';
 import { MediaCard } from '@/components/ui/Content/MediaCard/MediaCard';
 import { getFeaturedMediaCards } from '@/lib/featured-media.service';
 import { mediaCardsMock } from '@/mocks/mediaCards.mock';
+import { ContentMotion } from './ContentMotion';
 import './_content.scss';
 
 export const Content = async () => {
@@ -14,7 +15,7 @@ export const Content = async () => {
     }
 
     return (
-        <div className="content" id="content">
+        <ContentMotion>
             <div className="contentContainer">
                 <Title title="Contenido" span="destacado" />
                 <p>Una selección de mis videos con mejor rendimiento y mayor interacción.</p>
@@ -26,6 +27,6 @@ export const Content = async () => {
                     }
                 </div>
             </div>
-        </div>
+        </ContentMotion>
     )
 }

@@ -1,6 +1,6 @@
 'use client';
 
-import { useEffect, useState } from 'react';
+import { useQuery } from '@tanstack/react-query';
 
 type AudienceDatum = {
     label: string;
@@ -15,6 +15,15 @@ type InstagramInsightsResponse = {
     performanceData: AudienceDatum[];
     source: 'live' | 'mixed' | 'fallback';
     message?: string;
+};
+
+type InstagramAudienceState = {
+    ageData: AudienceDatum[];
+    genderData: AudienceDatum[];
+    locationData: AudienceDatum[];
+    performanceData: AudienceDatum[];
+    source: 'live' | 'mixed' | 'fallback';
+    error: string | null;
 };
 
 const defaultAgeData: AudienceDatum[] = [
@@ -40,56 +49,58 @@ const defaultPerformanceData: AudienceDatum[] = [
     { label: 'Publicaciones', value: 0 },
 ];
 
-export function useInstagramAudienceData() {
-    const [ageData, setAgeData] = useState<AudienceDatum[]>(defaultAgeData);
-    const [genderData, setGenderData] = useState<AudienceDatum[]>(defaultGenderData);
-    const [locationData, setLocationData] = useState<AudienceDatum[]>(defaultLocationData);
-    const [performanceData, setPerformanceData] = useState<AudienceDatum[]>(defaultPerformanceData);
-    const [source, setSource] = useState<'live' | 'mixed' | 'fallback'>('fallback');
-    const [loading, setLoading] = useState(true);
-    const [error, setError] = useState<string | null>(null);
+const defaultInstagramAudienceState: InstagramAudienceState = {
+    ageData: defaultAgeData,
+    genderData: defaultGenderData,
+    locationData: defaultLocationData,
+    performanceData: defaultPerformanceData,
+    source: 'fallback',
+    error: null,
+};
 
-    useEffect(() => {
-        const fetchInsights = async () => {
-            try {
-                setLoading(true);
-                const response = await fetch('/api/instagram/insights', {
-                    cache: 'no-store',
-                });
+async function fetchInstagramAudienceData(): Promise<InstagramAudienceState> {
+    try {
+        const response = await fetch('/api/instagram/insights', {
+            cache: 'no-store',
+        });
 
-                if (!response.ok) {
-                    throw new Error(`Failed to fetch Instagram data: ${response.statusText}`);
-                }
+        if (!response.ok) {
+            throw new Error(`Failed to fetch Instagram data: ${response.statusText}`);
+        }
 
-                const data = (await response.json()) as InstagramInsightsResponse;
-                setAgeData(data.ageData ?? defaultAgeData);
-                setGenderData(data.genderData ?? defaultGenderData);
-                setLocationData(data.locationData ?? defaultLocationData);
-                setPerformanceData(data.performanceData ?? defaultPerformanceData);
-                setSource(data.source ?? 'fallback');
-                setError(null);
-            } catch (err) {
-                setError(err instanceof Error ? err.message : 'Unknown error');
-                setAgeData(defaultAgeData);
-                setGenderData(defaultGenderData);
-                setLocationData(defaultLocationData);
-                setPerformanceData(defaultPerformanceData);
-                setSource('fallback');
-            } finally {
-                setLoading(false);
-            }
+        const data = (await response.json()) as InstagramInsightsResponse;
+
+        return {
+            ageData: data.ageData ?? defaultAgeData,
+            genderData: data.genderData ?? defaultGenderData,
+            locationData: data.locationData ?? defaultLocationData,
+            performanceData: data.performanceData ?? defaultPerformanceData,
+            source: data.source ?? 'fallback',
+            error: null,
         };
+    } catch (err) {
+        return {
+            ...defaultInstagramAudienceState,
+            error: err instanceof Error ? err.message : 'Unknown error',
+        };
+    }
+}
 
-        fetchInsights();
-    }, []);
+export function useInstagramAudienceData() {
+    const { data, isLoading } = useQuery({
+        queryKey: ['audience', 'instagram'],
+        queryFn: fetchInstagramAudienceData,
+    });
+
+    const audienceData = data ?? defaultInstagramAudienceState;
 
     return {
-        ageData,
-        genderData,
-        locationData,
-        performanceData,
-        source,
-        loading,
-        error,
+        ageData: audienceData.ageData,
+        genderData: audienceData.genderData,
+        locationData: audienceData.locationData,
+        performanceData: audienceData.performanceData,
+        source: audienceData.source,
+        loading: isLoading,
+        error: audienceData.error,
     };
 }
