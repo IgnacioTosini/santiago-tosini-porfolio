@@ -12,31 +12,31 @@ const timelineMoments = [
     {
         year: '2022',
         title: 'El inicio del camino',
-        description: 'Primera reacción de fútbol - 17 de marzo 2022 ',
+        description: 'En marzo de 2022 realicé mi primera reacción de fútbol, viendo Aldosivi - Tigre',
         href: 'https://www.youtube.com/watch?v=5yF4RShEgjo&t=33s',
     },
     {
         year: '2022',
         title: 'Argentina campeona del mundo',
-        description: 'Argentina campeona del mundo - 18 de diciembre 2022 ',
+        description: 'A finales de 2022 reaccioné por primera vez a un mundial, siendo este muy especial 🏆 ',
         href: 'https://www.youtube.com/watch?v=44HxbA9kzLY',
     },
     {
         year: '2024',
-        title: 'Primeras reacciones dentro de una cancha',
-        description: 'Primera reacción dentro de una cancha - 17 de marzo 2024',
+        title: 'Primer reacción dentro de una cancha',
+        description: 'Tuve la posibilidad de traspasar la pantalla y reaccionar en vivo a un partido de Aldosivi',
         href: 'https://youtu.be/JWkiQM4qM_0?si=S26mOSyOI8CR68zu&t=1',
     },
     {
         year: '2024',
         title: 'Argentina campeona Copa América',
-        description: 'Argentina campeona Copa América - 15 de julio 2024',
+        description: 'Argentina volvía a coronarse y volvíamos a estar presentes⚽',
         href: 'https://www.youtube.com/watch?v=mccC0gCS-h8',
     },
     {
         year: '2025',
         title: 'Mi propio stream de fútbol',
-        description: 'Tuve mi propio stream de fútbol -  2 de julio 2025',
+        description: '"Gol sin que pique" se hizo realidad, junto a mi colega Luca Nivio, tuvimos nuestro stream de fútbol',
         href: 'https://www.youtube.com/watch?v=iDb41mKhSYU&t=2s',
     },
 ];
@@ -70,7 +70,6 @@ export const Timeline = () => {
                     <article className="timelineItem" key={index}>
                         <span className="timelineYear">{moment.year}</span>
                         <span className="timelineMarker" aria-hidden="true" />
-
                         <a
                             className="timelineCard"
                             href={moment.href}
