@@ -2,16 +2,17 @@ import type { Metadata } from "next";
 import { About } from "@/components/sections/About/About";
 import { Audience } from "@/components/sections/Audience/Audience";
 import { Contact } from "@/components/sections/Contact/Contact";
-import { Content } from "@/components/sections/Content/Content";
 import { Hero } from "@/components/sections/Hero/Hero";
 import { Numbers } from "@/components/sections/Numbers/Numbers";
 import { Service } from "@/components/sections/Service/Service";
+import { Sponsors } from "@/components/sections/Sponsors/Sponsors";
+import { Timeline } from "@/components/sections/Timeline/Timeline";
 
 const DEFAULT_SITE_URL = "https://santiagotosini.com";
 const SITE_URL = process.env.NEXT_PUBLIC_SITE_URL ?? DEFAULT_SITE_URL;
 
 export const metadata: Metadata = {
-  title: "Inicio",
+  title: "Santiago Tosini | Portfolio Oficial",
   description:
     "Conocé a Santiago Tosini: contenido deportivo, métricas de audiencia y oportunidades de colaboración.",
   alternates: {
@@ -48,11 +49,12 @@ export default function Home() {
         dangerouslySetInnerHTML={{ __html: JSON.stringify(personStructuredData) }}
       />
       <Hero />
-      <Content />
+      <Timeline />
       <About />
       <Numbers />
       <Audience />
       <Service />
+      <Sponsors />
       <Contact />
     </main>
   );

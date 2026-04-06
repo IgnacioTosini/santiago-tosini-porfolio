@@ -5,9 +5,10 @@ import Footer from "@/components/layout/Footer/Footer";
 import { FootballBackground } from "@/components/decor/FootballBackground";
 import { initializeServer } from "@/lib/server-init";
 import { Providers } from "./providers";
+import { Analytics } from "@vercel/analytics/next";
 import "./globals.css";
 
-const DEFAULT_SITE_URL = "https://santiago-tosini-porfolio.vercel.app";
+const DEFAULT_SITE_URL = "https://santiagotosini.com";
 const SITE_URL = process.env.NEXT_PUBLIC_SITE_URL ?? DEFAULT_SITE_URL;
 
 const inter = Inter({
@@ -101,6 +102,7 @@ export default async function RootLayout({
           <Navbar />
           {children}
           <Footer />
+          <Analytics />
         </Providers>
       </body>
     </html>

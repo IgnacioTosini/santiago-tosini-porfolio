@@ -1,6 +1,6 @@
 'use client';
 
-import { AUDIENCE_QUERY_STALE_TIME_MS, SOCIAL_QUERY_GC_TIME_MS } from '@/lib/cache';
+import { SOCIAL_QUERY_GC_TIME_MS, YOUTUBE_AUDIENCE_QUERY_STALE_TIME_MS } from '@/lib/cache';
 import type { AudienceDatum, AudienceSource } from '@/types/audience.types';
 import { useQuery } from '@tanstack/react-query';
 
@@ -14,6 +14,8 @@ type AudienceResponse = {
     interestData: AudienceDatum[];
     source: AudienceSource;
     message?: string;
+    lastSyncedAt?: string;
+    cached?: boolean;
 };
 
 type YoutubeAudienceState = {
@@ -86,7 +88,7 @@ async function fetchYoutubeAudienceData(): Promise<YoutubeAudienceState> {
             performance28dData: data.performance28dData ?? defaultPerformance28dData,
             source: data.source ?? 'fallback',
             message: data.message ?? null,
-            error: data.source === 'fallback' ? (data.message ?? 'No se pudieron cargar métricas en vivo.') : null,
+            error: null,
         };
     } catch (err) {
         return {
@@ -100,7 +102,7 @@ export function useYoutubeAudienceData() {
     const { data, isLoading } = useQuery({
         queryKey: ['audience', 'youtube'],
         queryFn: fetchYoutubeAudienceData,
-        staleTime: AUDIENCE_QUERY_STALE_TIME_MS,
+        staleTime: YOUTUBE_AUDIENCE_QUERY_STALE_TIME_MS,
         gcTime: SOCIAL_QUERY_GC_TIME_MS,
     });
 

@@ -1,5 +1,5 @@
 export const navigationItems = [
-    { id: 'content', label: 'Contenido' },
+    { id: 'journey', label: 'Mi Trayectoria' },
     { id: 'about', label: 'Sobre mí' },
     { id: 'social', label: 'Mis Redes' },
     { id: 'services', label: 'Servicios' },

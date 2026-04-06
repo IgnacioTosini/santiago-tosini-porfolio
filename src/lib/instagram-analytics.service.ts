@@ -1,3 +1,5 @@
+import { instagramAgeData, instagramGenderData, instagramLocationData, instagramPerformanceData } from "@/mocks/instagramData.mock";
+
 type AudienceDatum = {
     label: string;
     value: number;
@@ -78,29 +80,6 @@ type InsightsDemographicsResponse = {
 const INSTAGRAM_GRAPH_URL = 'https://graph.instagram.com';
 const INSTAGRAM_MEDIA_LIMIT = 12;
 const INSTAGRAM_TOP_MEDIA_CANDIDATE_LIMIT = 4;
-
-const INSTAGRAM_FALLBACK_PERFORMANCE_DATA: AudienceDatum[] = [
-    { label: 'Seguidores', value: 105000 },
-    { label: 'Publicaciones', value: 1046 },
-];
-
-const INSTAGRAM_FALLBACK_AGE_DATA: AudienceDatum[] = [
-    { label: '18-24', value: 50 },
-    { label: '25-34', value: 35 },
-    { label: '35+', value: 15 },
-];
-
-const INSTAGRAM_FALLBACK_GENDER_DATA: AudienceDatum[] = [
-    { label: 'Masculino', value: 72 },
-    { label: 'Femenino', value: 23 },
-    { label: 'No especificado', value: 5 },
-];
-
-const INSTAGRAM_FALLBACK_LOCATION_DATA: AudienceDatum[] = [
-    { label: 'Argentina', value: 68 },
-    { label: 'México', value: 18 },
-    { label: 'Chile', value: 14 },
-];
 
 function mapGenderLabel(gender: string): string {
     switch (gender.toUpperCase()) {
@@ -365,10 +344,10 @@ export async function getInstagramAudienceInsights(): Promise<{
 
     if (!accessToken) {
         return {
-            ageData: INSTAGRAM_FALLBACK_AGE_DATA,
-            genderData: INSTAGRAM_FALLBACK_GENDER_DATA,
-            locationData: INSTAGRAM_FALLBACK_LOCATION_DATA,
-            performanceData: INSTAGRAM_FALLBACK_PERFORMANCE_DATA,
+            ageData: instagramAgeData,
+            genderData: instagramGenderData,
+            locationData: instagramLocationData,
+            performanceData: instagramPerformanceData,
             source: 'fallback',
             message: 'Falta INSTAGRAM_ACCESS_TOKEN en las variables de entorno.',
         };
@@ -396,9 +375,9 @@ export async function getInstagramAudienceInsights(): Promise<{
 
         if (!userId) {
             return {
-                ageData: INSTAGRAM_FALLBACK_AGE_DATA,
-                genderData: INSTAGRAM_FALLBACK_GENDER_DATA,
-                locationData: INSTAGRAM_FALLBACK_LOCATION_DATA,
+                ageData: instagramAgeData,
+                genderData: instagramGenderData,
+                locationData: instagramLocationData,
                 performanceData,
                 source: 'mixed',
                 message: 'No se pudo obtener el ID de usuario para métricas demográficas.',
@@ -412,11 +391,11 @@ export async function getInstagramAudienceInsights(): Promise<{
         ]);
 
         const ageData =
-            ageResult.status === 'fulfilled' && ageResult.value ? ageResult.value : INSTAGRAM_FALLBACK_AGE_DATA;
+            ageResult.status === 'fulfilled' && ageResult.value ? ageResult.value : instagramAgeData;
         const genderData =
-            genderResult.status === 'fulfilled' && genderResult.value ? genderResult.value : INSTAGRAM_FALLBACK_GENDER_DATA;
+            genderResult.status === 'fulfilled' && genderResult.value ? genderResult.value : instagramGenderData;
         const locationData =
-            locationResult.status === 'fulfilled' && locationResult.value ? locationResult.value : INSTAGRAM_FALLBACK_LOCATION_DATA;
+            locationResult.status === 'fulfilled' && locationResult.value ? locationResult.value : instagramLocationData;
 
         const allLive =
             ageResult.status === 'fulfilled' && ageResult.value !== null &&
@@ -433,10 +412,10 @@ export async function getInstagramAudienceInsights(): Promise<{
         return { ageData, genderData, locationData, performanceData, source };
     } catch {
         return {
-            ageData: INSTAGRAM_FALLBACK_AGE_DATA,
-            genderData: INSTAGRAM_FALLBACK_GENDER_DATA,
-            locationData: INSTAGRAM_FALLBACK_LOCATION_DATA,
-            performanceData: INSTAGRAM_FALLBACK_PERFORMANCE_DATA,
+            ageData: instagramAgeData,
+            genderData: instagramGenderData,
+            locationData: instagramLocationData,
+            performanceData: instagramPerformanceData,
             source: 'fallback',
         };
     }

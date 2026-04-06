@@ -50,7 +50,7 @@ export const Numbers = () => {
                     href='/#youtube'
                 />
             </div>
-            <p className='numbersLegal'>Todos los datos son aproximados y pueden variar. El valor de la edad de la audiencia es estimado. Y el mínimo de edad es 13 años. Por favor, verifica los datos directamente en las plataformas correspondientes.</p>
+            <p className='numbersLegal'>*Todos los datos son aproximados y pueden variar. El valor de la edad de la audiencia es estimado, el mínimo de edad es 13 años. Por favor, verifica los datos directamente en las plataformas correspondientes.*</p>
         </section>
     )
 }

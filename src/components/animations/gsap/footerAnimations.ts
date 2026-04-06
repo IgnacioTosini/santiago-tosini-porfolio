@@ -7,6 +7,9 @@ export function animateFooter(container: HTMLElement): void {
     gsap.registerPlugin(ScrollTrigger);
 
     const prefersReducedMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+    const isMobile = window.matchMedia('(max-width: 768px)').matches;
+    const contactStart = isMobile ? 'bottom 88%' : 'bottom 96%';
+    const footerStart = isMobile ? 'top 92%' : 'top 99%';
     const contactSection = document.getElementById('contact');
 
     const title = container.querySelector<HTMLElement>('.footerContentInfo h1');
@@ -95,8 +98,9 @@ export function animateFooter(container: HTMLElement): void {
 
     const footerTop = container.getBoundingClientRect().top;
     const contactBottom = contactSection?.getBoundingClientRect().bottom;
-    const footerVisible = footerTop <= window.innerHeight * 0.99;
-    const contactCompleted = typeof contactBottom === 'number' && contactBottom <= window.innerHeight * 0.96;
+    const footerVisible = footerTop <= window.innerHeight * (isMobile ? 0.92 : 0.99);
+    const contactCompleted =
+        typeof contactBottom === 'number' && contactBottom <= window.innerHeight * (isMobile ? 0.88 : 0.96);
 
     if (footerVisible || contactCompleted) {
         playAnimation();
@@ -106,7 +110,7 @@ export function animateFooter(container: HTMLElement): void {
     if (contactSection) {
         ScrollTrigger.create({
             trigger: contactSection,
-            start: 'bottom 96%',
+            start: contactStart,
             invalidateOnRefresh: true,
             once: true,
             onEnter: playAnimation,
@@ -116,7 +120,7 @@ export function animateFooter(container: HTMLElement): void {
 
     ScrollTrigger.create({
         trigger: container,
-        start: 'top 99%',
+        start: footerStart,
         invalidateOnRefresh: true,
         once: true,
         onEnter: playAnimation,

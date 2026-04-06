@@ -7,6 +7,8 @@ export function animateAudience(container: HTMLElement): void {
     gsap.registerPlugin(ScrollTrigger);
 
     const prefersReducedMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+    const isMobile = window.matchMedia('(max-width: 768px)').matches;
+    const sectionStart = isMobile ? 'top 68%' : 'top 80%';
 
     const sections = Array.from(container.querySelectorAll<HTMLElement>('.audienceContainer'));
     const bars = Array.from(container.querySelectorAll<HTMLElement>('#sym\\:AudienceCard .audienceBarFill'));
@@ -26,7 +28,7 @@ export function animateAudience(container: HTMLElement): void {
         const tl = gsap.timeline({
             scrollTrigger: {
                 trigger: section,
-                start: 'top 80%',
+                start: sectionStart,
                 toggleActions: 'play none none reverse',
             },
             defaults: { ease },

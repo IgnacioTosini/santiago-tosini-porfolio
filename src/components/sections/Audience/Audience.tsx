@@ -86,13 +86,13 @@ export const Audience = () => {
             data: instagramLocationData,
         },
         {
-            title: 'Intereses',
-            subtitle: 'Temáticas principales, estimado',
+            title: 'Desde Dónde me ven (Tráfico)',
+            subtitle: 'Fuentes de tráfico, estimado',
             data: instagramInterestData,
         },
         {
             title: 'Estado de la Cuenta',
-            subtitle: 'Estadísticas totales en vivo',
+            subtitle: 'Estadísticas estimadas',
             data: instagramPerformanceData,
             valueType: 'number',
         },

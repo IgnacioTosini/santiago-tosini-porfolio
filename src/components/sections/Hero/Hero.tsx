@@ -45,29 +45,29 @@ export const Hero = () => {
                         <span>—</span> <h1 className="heroTitle"> Creador de Contenido</h1>
                     </div>
                     <div className='heroSubtitleContainer'>
-                        <p className="heroSubtitle">Santi Tosini — <span>Contenido de fútbol</span> que conecta con miles</p>
+                        <p className="heroSubtitle">Santi Tosini — <span>Contenido de fútbol</span> que conecta con millones</p>
                     </div>
-                    <p className='heroLead'>+100K seguidores • Reels virales • Contenido real en la calle</p>
+                    <p className='heroLead'>+1M seguidores • Reels virales • Contenido real en la calle</p>
                     <p className='heroDescription'>Creo contenido de fútbol que combina entretenimiento, espontaneidad e interacción con la audiencia.</p>
-                    <div className='heroButtons'>
+                    <div id='sym:heroButtons' className='heroButtons'>
                         <Link href="#contact" className='heroButtonPrimary' onClick={smoothScroll}>
                             Trabajá conmigo
                         </Link>
-                        <Link href="#content" className='heroButtonSecondary' onClick={smoothScroll}>
+                        <Link href="#social" className='heroButtonSecondary' onClick={smoothScroll}>
                             <IoPlayOutline /> Ver mi contenido
                         </Link>
                     </div>
                     <div className='numbersDetails'>
                         <div className='numberDetail'>
-                            <h2 className='number heroStatValue'>+100K</h2>
+                            <h2 className='number heroStatValue'>+1M</h2>
                             <p className='label heroStatLabel'>Seguidores</p>
                         </div>
                         <div className='numberDetail'>
-                            <h2 className='number heroStatValue'>+500K</h2>
+                            <h2 className='number heroStatValue'>+5.4M</h2>
                             <p className='label heroStatLabel'>Vistas mensuales</p>
                         </div>
                         <div className='numberDetail'>
-                            <h2 className='number heroStatValue'>50K–300K</h2>
+                            <h2 className='number heroStatValue'>50K–250K</h2>
                             <p className='label heroStatLabel'>Views Promedio</p>
                         </div>
                     </div>

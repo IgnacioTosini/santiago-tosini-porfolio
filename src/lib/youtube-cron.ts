@@ -1,4 +1,5 @@
 import cron from 'node-cron';
+import { cacheYoutubeAudienceInsights, getYoutubeAudienceInsights } from './youtube-analytics.service';
 import { getYoutubeChannelData, cacheYoutubeData } from './youtube.service';
 
 let cronJob: cron.ScheduledTask | null = null;
@@ -25,8 +26,16 @@ export function initYoutubeCron() {
             );
 
             try {
-                const youtubeData = await getYoutubeChannelData();
+                const [youtubeData, youtubeAudience] = await Promise.all([
+                    getYoutubeChannelData(),
+                    getYoutubeAudienceInsights(),
+                ]);
+
                 await cacheYoutubeData(youtubeData);
+
+                if (youtubeAudience.source !== 'fallback') {
+                    await cacheYoutubeAudienceInsights(youtubeAudience);
+                }
 
                 console.log(
                     `[${new Date().toISOString()}] ✅ YouTube data synced successfully`
@@ -38,6 +47,7 @@ export function initYoutubeCron() {
                     `   Total Views: ${youtubeData.metrics.viewCount.toLocaleString()}`
                 );
                 console.log(`   Recent Videos: ${youtubeData.recentVideos.length}`);
+                console.log(`   Audience Source: ${youtubeAudience.source}`);
             } catch (error) {
                 console.error(
                     `[${new Date().toISOString()}] ❌ YouTube sync failed:`,

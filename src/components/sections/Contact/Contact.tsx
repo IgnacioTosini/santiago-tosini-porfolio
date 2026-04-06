@@ -6,11 +6,33 @@ import { Title } from '@/components/ui/Title/Title';
 import { IoLogoTiktok, IoMail } from 'react-icons/io5';
 import { IoLogoInstagram, IoLogoYoutube } from 'react-icons/io';
 import { animateContact } from '@/components/animations/gsap/contactAnimations';
+import { toast } from 'react-toastify';
 import './_contact.scss';
 
 export const Contact = () => {
     const contactRef = useRef<HTMLElement>(null);
     const contactEmail = process.env.NEXT_PUBLIC_CONTACT_EMAIL;
+
+    const handleEmailClick = async () => {
+        if (!contactEmail) return;
+
+        const subject = 'Consulta comercial - Santiago Tosini';
+        const body = `Hola Santiago, Quiero hablar sobre una propuesta de colaboración. ¡Gracias!`;
+        const gmailUrl = `https://mail.google.com/mail/?view=cm&fs=1&to=${encodeURIComponent(contactEmail)}&su=${encodeURIComponent(subject)}&body=${encodeURIComponent(body)}`;
+
+        const mailWindow = window.open(gmailUrl, '_blank', 'noopener,noreferrer');
+
+        if (mailWindow) {
+            mailWindow.opener = null;
+        }
+
+        try {
+            await navigator.clipboard.writeText(contactEmail);
+            toast.success('Gmail abierto y email copiado');
+        } catch {
+            toast.info(`Escribinos a ${contactEmail}`);
+        }
+    };
 
     useEffect(() => {
         if (!contactRef.current) return;
@@ -31,11 +53,8 @@ export const Contact = () => {
                     <button
                         className='contactButton'
                         disabled={!contactEmail}
-                        onClick={() => {
-                            if (!contactEmail) return;
-                            window.location.href = `mailto:${contactEmail}`;
-                        }}
-                        title={contactEmail ? `Enviar email a ${contactEmail}` : 'Configurá NEXT_PUBLIC_CONTACT_EMAIL para habilitar este botón'}
+                        onClick={handleEmailClick}
+                        title={contactEmail ? `Abrir Gmail con asunto prearmado y copiar ${contactEmail}` : 'Configurá NEXT_PUBLIC_CONTACT_EMAIL para habilitar este botón'}
                     >
                         <IoMail />
                         <span>Email</span>

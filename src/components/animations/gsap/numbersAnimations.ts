@@ -7,6 +7,9 @@ export function animateNumbers(container: HTMLElement): void {
     gsap.registerPlugin(ScrollTrigger);
 
     const pref = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+    const isMobile = window.matchMedia('(max-width: 768px)').matches;
+    const sectionStart = isMobile ? 'top 70%' : 'top 82%';
+    const parallaxStart = isMobile ? 'top 90%' : 'top bottom';
 
     const title = container.querySelector<HTMLElement>('.title h1');
     const cards = Array.from(container.querySelectorAll<HTMLElement>('.numbersCards .numbersCard'));
@@ -30,7 +33,7 @@ export function animateNumbers(container: HTMLElement): void {
     const tl = gsap.timeline({
         scrollTrigger: {
             trigger: container,
-            start: 'top 82%',
+            start: sectionStart,
             toggleActions: 'play none none reverse',
         },
         defaults: { ease },
@@ -136,7 +139,7 @@ export function animateNumbers(container: HTMLElement): void {
             ease: 'none',
             scrollTrigger: {
                 trigger: container,
-                start: 'top bottom',
+                start: parallaxStart,
                 end: 'bottom top',
                 scrub: true,
             },

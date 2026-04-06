@@ -7,6 +7,8 @@ export function animateContact(container: HTMLElement): void {
     gsap.registerPlugin(ScrollTrigger);
 
     const prefersReducedMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+    const isMobile = window.matchMedia('(max-width: 768px)').matches;
+    const sectionStart = isMobile ? 'top 70%' : 'top 82%';
     const trigger = container.querySelector<HTMLElement>('#sym\\:Contact') ?? container;
 
     const card = container.querySelector<HTMLElement>('#sym\\:Contact');
@@ -28,7 +30,7 @@ export function animateContact(container: HTMLElement): void {
     const tl = gsap.timeline({
         scrollTrigger: {
             trigger,
-            start: 'top 82%',
+            start: sectionStart,
             toggleActions: 'play none none reverse',
         },
         defaults: { ease },

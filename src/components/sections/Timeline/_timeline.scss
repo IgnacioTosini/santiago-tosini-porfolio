@@ -1,0 +1,224 @@
+@use '@/styles/variables' as *;
+
+.timeline {
+    width: min(1200px, calc(100% - 1rem));
+    margin: 0 auto;
+    padding: 1rem 0 3rem;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    gap: 1.25rem;
+    min-height: 50dvh;
+
+    .timelineIntro {
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        gap: 0.75rem;
+        text-align: center;
+
+        p {
+            max-width: 700px;
+            color: $color-text-secondary;
+            font-family: $font-family-primary;
+            font-size: clamp($font-size-normal, 2vw, $font-size-medium);
+            padding: 0 0.5rem;
+        }
+    }
+
+    .timelineHint {
+        display: none;
+        align-items: center;
+        gap: 0.35rem;
+        color: $color-text-tertiary;
+        font-family: $font-family-primary;
+        font-size: 0.9rem;
+        font-weight: $font-weight-medium;
+    }
+
+    .timelineList {
+        position: relative;
+        display: grid;
+        grid-template-columns: repeat(5, minmax(0, 1fr));
+        gap: 0.85rem;
+        align-items: stretch;
+        height: 100%;
+    }
+
+    .timelineTrack {
+        position: absolute;
+        left: 0;
+        right: 0;
+        top: 2.15rem;
+        height: 2px;
+        background: linear-gradient(90deg, rgba(167, 139, 250, 0.12) 0%, rgba(167, 139, 250, 0.9) 50%, rgba(167, 139, 250, 0.12) 100%);
+        z-index: 0;
+    }
+
+    .timelineItem {
+        display: grid;
+        grid-template-rows: auto auto 1fr;
+        justify-items: center;
+        align-items: start;
+        align-self: stretch;
+        gap: 0.55rem;
+        min-width: 0;
+        height: 100%;
+        z-index: 1;
+    }
+
+    .timelineYear {
+        color: $color-text-tertiary;
+        font-family: $font-family-secondary;
+        font-size: clamp(1.15rem, 1.8vw, 1.4rem);
+        font-weight: $font-weight-bold;
+        line-height: 1;
+    }
+
+    .timelineMarker {
+        width: 12px;
+        height: 12px;
+        border-radius: 999px;
+        border: 3px solid rgba(167, 139, 250, 0.55);
+        background: $color-secondary;
+        box-shadow: 0 0 0 6px rgba(124, 58, 237, 0.12);
+    }
+
+    .timelineCard {
+        width: 100%;
+        min-height: 160px;
+        height: 100%;
+        display: flex;
+        flex-direction: column;
+        gap: 0.55rem;
+        padding: 0.85rem 0.9rem;
+        text-decoration: none;
+        border-radius: $radius-xl;
+        border: 1px solid rgba(167, 139, 250, 0.2);
+        background: linear-gradient(180deg, rgba(18, 18, 18, 0.92) 0%, rgba(28, 19, 41, 0.92) 100%);
+        box-shadow: $shadow-card;
+        transition: transform 0.25s ease, border-color 0.25s ease, box-shadow 0.25s ease;
+
+        &:hover {
+            transform: translateY(-4px);
+            border-color: rgba(167, 139, 250, 0.5);
+            box-shadow: 0 10px 28px rgba(76, 29, 149, 0.35);
+        }
+
+        h3 {
+            color: $color-text-primary;
+            font-family: $font-family-secondary;
+            font-size: clamp(1rem, 1.8vw, 1.15rem);
+            line-height: 1.25;
+        }
+
+        p {
+            color: $color-text-secondary;
+            font-family: $font-family-primary;
+            font-size: 0.9rem;
+            line-height: 1.42;
+            display: -webkit-box;
+            line-clamp: 4;
+            -webkit-line-clamp: 4;
+            -webkit-box-orient: vertical;
+            overflow: hidden;
+        }
+    }
+
+    .timelineBadge,
+    .timelineAction {
+        width: fit-content;
+        display: inline-flex;
+        align-items: center;
+        gap: 0.4rem;
+        font-family: $font-family-primary;
+        font-weight: $font-weight-semibold;
+    }
+
+    .timelineBadge {
+        color: #fff;
+        background: rgba(255, 0, 0, 0.12);
+        border: 1px solid rgba(255, 0, 0, 0.2);
+        border-radius: 999px;
+        padding: 0.25rem 0.55rem;
+        font-size: 0.78rem;
+    }
+
+    .timelineAction {
+        margin-top: auto;
+        color: $color-text-tertiary;
+        font-size: 0.88rem;
+    }
+}
+
+@media (max-width: 1100px) {
+    .timeline {
+        .timelineHint {
+            display: inline-flex;
+            align-self: flex-start;
+            margin-left: 0.25rem;
+        }
+
+        .timelineList {
+            grid-template-columns: none;
+            grid-auto-flow: column;
+            grid-auto-columns: minmax(220px, 240px);
+            overflow-x: auto;
+            padding: 0 0.2rem 0.75rem;
+            scroll-snap-type: x mandatory;
+            scroll-padding-left: 0.25rem;
+            -webkit-overflow-scrolling: touch;
+            touch-action: pan-x;
+
+            &::-webkit-scrollbar {
+                height: 8px;
+            }
+
+            &::-webkit-scrollbar-thumb {
+                background: rgba(167, 139, 250, 0.35);
+                border-radius: 999px;
+            }
+        }
+
+        .timelineItem {
+            scroll-snap-align: start;
+        }
+    }
+}
+
+@media (max-width: 768px) {
+    .timeline {
+        width: min(100%, calc(100% - 0.75rem));
+
+        .timelineIntro {
+            p {
+                font-size: 0.95rem;
+            }
+        }
+
+        .timelineList {
+            grid-auto-columns: minmax(78vw, 1fr);
+            gap: 0.75rem;
+        }
+
+        .timelineCard {
+            min-height: 152px;
+            padding: 0.8rem;
+
+            h3 {
+                font-size: 1rem;
+            }
+
+            p {
+                font-size: 0.87rem;
+                line-clamp: 3;
+                -webkit-line-clamp: 3;
+            }
+        }
+
+        .timelineYear {
+            font-size: 1.05rem;
+        }
+    }
+}

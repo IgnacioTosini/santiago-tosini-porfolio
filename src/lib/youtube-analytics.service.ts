@@ -1,5 +1,4 @@
 import { interestData as defaultInterestData } from '@/mocks/interestData.mock';
-import { getCachedYoutubeData, getYoutubeChannelData } from '@/lib/youtube.service';
 import type { AudienceDatum } from '@/types/audience.types';
 
 type AnalyticsResponse = {
@@ -7,6 +6,19 @@ type AnalyticsResponse = {
     rows?: Array<Array<string | number>>;
 };
 
+export type YoutubeAudienceInsights = {
+    ageData: AudienceDatum[];
+    genderData: AudienceDatum[];
+    locationData: AudienceDatum[];
+    trafficSourceData: AudienceDatum[];
+    performance28dData: AudienceDatum[];
+    interestData: AudienceDatum[];
+    source: 'live' | 'mixed' | 'fallback';
+    message?: string;
+    lastSyncedAt?: string;
+};
+
+const YOUTUBE_AUDIENCE_CACHE_FILE = 'youtube-audience.json';
 const OAUTH_TOKEN_URL = 'https://oauth2.googleapis.com/token';
 const YT_ANALYTICS_URL = 'https://youtubeanalytics.googleapis.com/v2/reports';
 const DEFAULT_ANALYTICS_DAYS = 365;
@@ -39,7 +51,7 @@ const YOUTUBE_FALLBACK_TRAFFIC_DATA: AudienceDatum[] = [
 
 const YOUTUBE_FALLBACK_PERFORMANCE_28D: AudienceDatum[] = [
     { label: 'Visualizaciones', value: 0 },
-    { label: 'Suscriptores', value: 0 },
+    { label: 'Cantidad de Suscriptores Ganados', value: 0 },
     { label: 'Tiempo de visualizacion', value: 0 },
 ];
 
@@ -206,7 +218,43 @@ function normalizeYoutubeAgeData(rows: Array<Array<string | number>>, fallback: 
     }));
 }
 
-export async function getYoutubeAudienceInsights() {
+export async function getCachedYoutubeAudienceInsights(): Promise<YoutubeAudienceInsights | null> {
+    try {
+        const fs = await import('fs/promises');
+        const path = await import('path');
+        const cacheDir = path.join(process.cwd(), '.cache');
+        const cachePath = path.join(cacheDir, YOUTUBE_AUDIENCE_CACHE_FILE);
+        const data = await fs.readFile(cachePath, 'utf-8');
+
+        return JSON.parse(data) as YoutubeAudienceInsights;
+    } catch {
+        return null;
+    }
+}
+
+export async function cacheYoutubeAudienceInsights(data: YoutubeAudienceInsights): Promise<void> {
+    if (data.source === 'fallback') {
+        return;
+    }
+
+    try {
+        const fs = await import('fs/promises');
+        const path = await import('path');
+        const cacheDir = path.join(process.cwd(), '.cache');
+        const cachePath = path.join(cacheDir, YOUTUBE_AUDIENCE_CACHE_FILE);
+        const payload: YoutubeAudienceInsights = {
+            ...data,
+            lastSyncedAt: data.lastSyncedAt ?? new Date().toISOString(),
+        };
+
+        await fs.mkdir(cacheDir, { recursive: true });
+        await fs.writeFile(cachePath, JSON.stringify(payload, null, 2));
+    } catch (error) {
+        console.error('Error caching YouTube audience data:', error);
+    }
+}
+
+export async function getYoutubeAudienceInsights(): Promise<YoutubeAudienceInsights> {
     const fallbackAgeData: AudienceDatum[] = YOUTUBE_FALLBACK_AGE_DATA;
     const fallbackGenderData: AudienceDatum[] = YOUTUBE_FALLBACK_GENDER_DATA;
     const fallbackLocationData: AudienceDatum[] = YOUTUBE_FALLBACK_LOCATION_DATA;
@@ -236,6 +284,7 @@ export async function getYoutubeAudienceInsights() {
                 source,
                 message:
                     'Faltan credenciales OAuth para YouTube Analytics. Edad usa fallback y los intereses mantienen tus categorías definidas manualmente.',
+                lastSyncedAt: undefined,
             };
         }
 
@@ -275,15 +324,14 @@ export async function getYoutubeAudienceInsights() {
             ids: 'channel==MINE',
             startDate: last28.startDate,
             endDate: last28.endDate,
-            metrics: 'views,estimatedMinutesWatched',
+            metrics: 'views,estimatedMinutesWatched,subscribersGained,subscribersLost',
         });
 
-        const [ageGenderResponse, countryResponse, trafficResponse, currentPerformanceResponse, channelData] = await Promise.all([
+        const [ageGenderResponse, countryResponse, trafficResponse, currentPerformanceResponse] = await Promise.all([
             fetchAnalyticsReport(accessToken, ageGenderParams),
             fetchAnalyticsReport(accessToken, countryParams),
             fetchAnalyticsReport(accessToken, trafficParams),
             fetchAnalyticsReport(accessToken, currentPerformanceParams),
-            getCachedYoutubeData().then((cached) => cached ?? getYoutubeChannelData()),
         ]);
 
         const rows = ageGenderResponse.rows ?? [];
@@ -348,11 +396,13 @@ export async function getYoutubeAudienceInsights() {
 
         const currentViews = Number(currentPerformance[0] ?? 0);
         const currentWatchTime = Number(currentPerformance[1] ?? 0);
-        const totalSubscribers = channelData.metrics.subscriberCount;
+        const subscribersGained = Number(currentPerformance[2] ?? 0);
+        const subscribersLost = Number(currentPerformance[3] ?? 0);
+        const subscribers28d = Math.round(subscribersGained - subscribersLost);
 
         const literalPerformance28d: AudienceDatum[] = [
             { label: 'Visualizaciones', value: Math.max(0, Math.round(currentViews)) },
-            { label: 'Suscriptores', value: totalSubscribers },
+            { label: 'Cantidad de Suscriptores Ganados', value: subscribers28d },
             { label: 'Tiempo de visualizacion', value: Math.max(0, Math.round(currentWatchTime)) },
         ];
 
@@ -363,7 +413,17 @@ export async function getYoutubeAudienceInsights() {
         performance28dData = literalPerformance28d;
         source = 'mixed';
 
-        return { ageData, genderData, locationData, trafficSourceData, performance28dData, interestData, source, message };
+        return {
+            ageData,
+            genderData,
+            locationData,
+            trafficSourceData,
+            performance28dData,
+            interestData,
+            source,
+            message,
+            lastSyncedAt: new Date().toISOString(),
+        };
     } catch (error) {
         return {
             ageData,
@@ -374,6 +434,7 @@ export async function getYoutubeAudienceInsights() {
             interestData,
             source,
             message: error instanceof Error ? error.message : 'No se pudo obtener YouTube Analytics en vivo.',
+            lastSyncedAt: undefined,
         };
     }
 }

@@ -14,7 +14,9 @@ export function animateHeroEntrance(container: HTMLElement): void {
     const subtitleHighlight = container.querySelector<HTMLElement>('.heroSubtitle span');
     const lead = container.querySelector<HTMLElement>('.heroLead');
     const description = container.querySelector<HTMLElement>('.heroDescription');
-    const buttons = Array.from(container.querySelectorAll<HTMLElement>('.heroButtons a'));
+    const buttons = Array.from(
+        container.querySelectorAll<HTMLElement>('#sym\\:heroButtons a, .heroButtons a'),
+    );
     const stats = Array.from(container.querySelectorAll<HTMLElement>('.numbersDetails .numberDetail'));
     const statValues = Array.from(container.querySelectorAll<HTMLElement>('.heroStatValue'));
     const image = container.querySelector<HTMLElement>('.heroImage');
@@ -95,6 +97,7 @@ export function animateHeroEntrance(container: HTMLElement): void {
             },
             '-=0.35',
         );
+        tl.set(buttons, { autoAlpha: 1, clearProps: 'all' }, '>');
     }
 
     if (stats.length > 0) {

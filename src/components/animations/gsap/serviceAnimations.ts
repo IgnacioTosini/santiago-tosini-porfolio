@@ -7,6 +7,9 @@ export function animateService(container: HTMLElement): void {
     gsap.registerPlugin(ScrollTrigger);
 
     const prefersReducedMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+    const isMobile = window.matchMedia('(max-width: 768px)').matches;
+    const sectionStart = isMobile ? 'top 68%' : 'top 80%';
+    const parallaxStart = isMobile ? 'top 90%' : 'top bottom';
     const trigger = container.querySelector<HTMLElement>('#sym\\:Service') ?? container;
 
     const title = container.querySelector<HTMLElement>('#sym\\:Service .title h1');
@@ -30,7 +33,7 @@ export function animateService(container: HTMLElement): void {
     const tl = gsap.timeline({
         scrollTrigger: {
             trigger,
-            start: 'top 80%',
+            start: sectionStart,
             toggleActions: 'play none none reverse',
         },
         defaults: { ease },
@@ -123,7 +126,7 @@ export function animateService(container: HTMLElement): void {
             ease: 'none',
             scrollTrigger: {
                 trigger,
-                start: 'top bottom',
+                start: parallaxStart,
                 end: 'bottom top',
                 scrub: true,
             },

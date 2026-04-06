@@ -6,6 +6,8 @@ const ease = 'power4.out';
 export function animateAbout(container: HTMLElement): void {
     gsap.registerPlugin(ScrollTrigger);
     const pref = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+    const isMobile = window.matchMedia('(max-width: 768px)').matches;
+    const sectionStart = isMobile ? 'top 68%' : 'top 80%';
     const trigger = container.querySelector<HTMLElement>('#sym\\:About') ?? container;
 
     const title = container.querySelector<HTMLElement>('#sym\\:About .title h1');
@@ -25,7 +27,7 @@ export function animateAbout(container: HTMLElement): void {
     const tl = gsap.timeline({
         scrollTrigger: {
             trigger,
-            start: 'top 80%',
+            start: sectionStart,
             toggleActions: 'play none none reverse',
         },
         defaults: { ease },

@@ -1,0 +1,28 @@
+@use '@/styles/variables' as *;
+
+.sponsors {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    gap: 2rem;
+    min-height: 70dvh;
+    padding: 2.5rem 1.25rem;
+    color: $color-text-primary;
+
+    .title {
+        h1 {
+            gap: 0;
+        }
+    }
+
+    .sponsorsContainer {
+        display: flex;
+        flex-wrap: wrap;
+        align-items: center;
+        justify-content: center;
+        gap: 1rem;
+        width: 100%;
+        max-width: 1200px;
+    }
+}

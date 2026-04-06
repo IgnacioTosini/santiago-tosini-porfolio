@@ -25,9 +25,8 @@ export const About = () => {
         <section ref={aboutRef} className="about" id="about">
             <div className="aboutContent" id="sym:About">
                 <Title title={'Sobre'} span={'mí'} />
-                <p>Soy Santi, creador de contenido de Argentina enfocado en fútbol y entretenimiento.</p>
-                <p>A través de entrevistas callejeras, desafíos y contenido cercano, conecto con una audiencia joven que vive el fútbol todos los días.</p>
-                <p>Mi contenido se basa en autenticidad, humor y reacciones reales.</p>
+                <p>Me llamo Santi, tengo 25 años y soy creador de contenido en Argentina, enfocado en fútbol y entretenimiento.</p>
+                <p>Disfruto conectar con mi audiencia y sacarles una sonrisa cada día con el contenido que comparto.</p>
             </div>
             <div className="aboutCards">
                 <AboutCard icon={<FaMapMarkerAlt />} title="Mar del Plata, Argentina" />
