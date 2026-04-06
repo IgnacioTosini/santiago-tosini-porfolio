@@ -43,6 +43,7 @@
         grid-template-columns: repeat(5, minmax(0, 1fr));
         gap: 0.85rem;
         align-items: stretch;
+        width: 100%;
         height: 100%;
     }
 
@@ -86,6 +87,7 @@
     }
 
     .timelineCard {
+        position: relative;
         width: 100%;
         min-height: 160px;
         height: 100%;
@@ -98,7 +100,23 @@
         border: 1px solid rgba(167, 139, 250, 0.2);
         background: linear-gradient(180deg, rgba(18, 18, 18, 0.92) 0%, rgba(28, 19, 41, 0.92) 100%);
         box-shadow: $shadow-card;
+        overflow: hidden;
+        isolation: isolate;
+        clip-path: polygon(0 0, 100% 0, 100% calc(100% - 16px), calc(100% - 16px) 100%, 0 100%);
         transition: transform 0.25s ease, border-color 0.25s ease, box-shadow 0.25s ease;
+
+        &::after {
+            content: '';
+            position: absolute;
+            right: 0;
+            bottom: 0;
+            width: 40px;
+            height: 40px;
+            background: linear-gradient(135deg, rgba(192, 38, 255, 0.9) 0%, rgba(124, 58, 237, 0.2) 100%);
+            clip-path: polygon(100% 0, 0 100%, 100% 100%);
+            opacity: 0.9;
+            pointer-events: none;
+        }
 
         &:hover {
             transform: translateY(-4px);
@@ -164,10 +182,11 @@
             grid-template-columns: none;
             grid-auto-flow: column;
             grid-auto-columns: minmax(220px, 240px);
+            max-width: 100%;
             overflow-x: auto;
-            padding: 0 0.2rem 0.75rem;
+            padding: 0.1rem 0.35rem 0.85rem;
             scroll-snap-type: x mandatory;
-            scroll-padding-left: 0.25rem;
+            scroll-padding-inline: 0.35rem;
             -webkit-overflow-scrolling: touch;
             touch-action: pan-x;
 
@@ -190,6 +209,7 @@
 @media (max-width: 768px) {
     .timeline {
         width: min(100%, calc(100% - 0.75rem));
+        align-items: stretch;
 
         .timelineIntro {
             p {
@@ -197,14 +217,57 @@
             }
         }
 
+        .timelineHint {
+            display: inline-flex;
+            margin-left: 0.2rem;
+        }
+
         .timelineList {
-            grid-auto-columns: minmax(78vw, 1fr);
+            display: grid;
+            grid-auto-flow: column;
+            grid-auto-columns: minmax(260px, 82vw);
             gap: 0.75rem;
+            overflow-x: auto;
+            overflow-y: visible;
+            padding: 0.15rem 1rem 1rem 0.2rem;
+            scroll-snap-type: x mandatory;
+            scroll-padding-inline: 0.2rem;
+            mask-image: linear-gradient(to right, transparent 0, black 12px, black calc(100% - 52px), transparent 100%);
+            -webkit-mask-image: linear-gradient(to right, transparent 0, black 12px, black calc(100% - 52px), transparent 100%);
+        }
+
+        .timelineTrack {
+            left: 0.2rem;
+            right: 1rem;
+            top: 2.15rem;
+            width: auto;
+            height: 2px;
+            background: linear-gradient(90deg, rgba(167, 139, 250, 0.12) 0%, rgba(167, 139, 250, 0.9) 50%, rgba(167, 139, 250, 0.12) 100%);
+        }
+
+        .timelineItem {
+            grid-template-rows: auto auto 1fr;
+            justify-items: center;
+            row-gap: 0.5rem;
+            min-width: 0;
+            scroll-snap-align: start;
+        }
+
+        .timelineYear {
+            font-size: 1.05rem;
+            padding-left: 0;
+        }
+
+        .timelineMarker {
+            grid-column: auto;
+            grid-row: auto;
+            margin-top: 0;
         }
 
         .timelineCard {
+            width: 100%;
             min-height: 152px;
-            padding: 0.8rem;
+            padding: 0.8rem 0.9rem 1rem;
 
             h3 {
                 font-size: 1rem;
@@ -215,10 +278,6 @@
                 line-clamp: 3;
                 -webkit-line-clamp: 3;
             }
-        }
-
-        .timelineYear {
-            font-size: 1.05rem;
         }
     }
 }
