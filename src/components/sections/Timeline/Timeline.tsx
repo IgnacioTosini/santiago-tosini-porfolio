@@ -19,19 +19,19 @@ const timelineMoments = [
         year: '2022',
         title: 'Argentina campeona del mundo',
         description: 'Argentina campeona del mundo - 18 de diciembre 2022 ',
-        href: 'https://www.youtube.com/watch?v=5yF4RShEgjo&t=33s',
+        href: 'https://www.youtube.com/watch?v=44HxbA9kzLY',
     },
     {
         year: '2024',
         title: 'Primeras reacciones dentro de una cancha',
         description: 'Primera reacción dentro de una cancha - 17 de marzo 2024',
-        href: 'https://www.youtube.com/watch?v=JWkiQM4qM_0&t=1211s',
+        href: 'https://youtu.be/JWkiQM4qM_0?si=S26mOSyOI8CR68zu&t=1',
     },
     {
         year: '2024',
         title: 'Argentina campeona Copa América',
         description: 'Argentina campeona Copa América - 15 de julio 2024',
-        href: 'https://www.youtube.com/watch?v=mccC0gCS-h8&t=372s',
+        href: 'https://www.youtube.com/watch?v=mccC0gCS-h8',
     },
     {
         year: '2025',

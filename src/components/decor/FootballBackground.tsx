@@ -18,7 +18,7 @@ interface FootballBall {
     seed: number;
 }
 
-const BALL_COUNT = 20;
+const BALL_COUNT = 16;
 
 const randomBetween = (min: number, max: number) => Math.random() * (max - min) + min;
 const clamp = (value: number, min: number, max: number) => Math.min(Math.max(value, min), max);
