@@ -60,7 +60,7 @@ export function useTiktokAudienceData() {
         gcTime: SOCIAL_QUERY_GC_TIME_MS,
     });
 
-    const audienceData = data ?? defaultTiktokAudienceState;
+    const audienceData = data ? data : defaultTiktokAudienceState;
 
     return {
         performanceData: audienceData.performanceData,
