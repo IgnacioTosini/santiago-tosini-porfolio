@@ -18,7 +18,7 @@ type TiktokAudienceState = {
 };
 
 const defaultPerformanceData: AudienceDatum[] = [
-    { label: 'Seguidores', value: 197233 },
+    { label: 'Seguidores', value: 209000 },
     { label: 'Me gusta totales', value: 6319226 },
     { label: 'Videos', value: 783 },
 ];
