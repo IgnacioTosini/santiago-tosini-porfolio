@@ -24,10 +24,10 @@ export const instagramInterestData = [
 ];
 
 export const instagramPerformanceData = [
-    { label: 'Seguidores', value: 105000 },
+    { label: 'Seguidores', value: 121000 },
     { label: 'Publicaciones', value: 1056 },
 ];
 
 export const instagramFollowers = instagramPerformanceData && instagramPerformanceData.length > 0
     ? `+${(instagramPerformanceData[0].value / 1000).toFixed(0)}k`
-    : '+105k'; // Valor por defecto de Instagram
+    : '+121k'; // Valor por defecto de Instagram

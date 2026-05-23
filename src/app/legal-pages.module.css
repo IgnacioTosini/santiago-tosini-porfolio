@@ -1,0 +1,93 @@
+.page {
+  min-height: calc(100vh - 220px);
+  padding: 56px 20px;
+}
+
+.container {
+  width: min(920px, 100%);
+  margin: 0 auto;
+  padding: 36px;
+  border: 1px solid rgba(255, 255, 255, 0.16);
+  border-radius: 20px;
+  background:
+    linear-gradient(180deg, rgba(9, 14, 14, 0.9), rgba(9, 14, 14, 0.82)),
+    radial-gradient(circle at 10% 0%, rgba(120, 196, 176, 0.2), transparent 30%);
+  backdrop-filter: blur(2px);
+  box-shadow: 0 22px 48px rgba(0, 0, 0, 0.35);
+  color: #ecf4ef;
+}
+
+.badge {
+  display: inline-flex;
+  margin-bottom: 12px;
+  padding: 6px 12px;
+  border-radius: 999px;
+  border: 1px solid rgba(170, 226, 211, 0.45);
+  background: rgba(45, 122, 106, 0.28);
+  font-size: 0.78rem;
+  font-weight: 700;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+}
+
+.title {
+  margin: 0;
+  color: #ffffff;
+  font-size: clamp(1.9rem, 2.4vw, 2.6rem);
+  line-height: 1.1;
+}
+
+.meta {
+  margin-top: 10px;
+  color: #b8cdc3;
+  font-size: 0.95rem;
+}
+
+.lead {
+  margin-top: 18px;
+  margin-bottom: 30px;
+  color: #d8e8e1;
+  font-size: 1.06rem;
+  line-height: 1.65;
+}
+
+.content {
+  display: flex;
+  flex-direction: column;
+  gap: 14px;
+}
+
+.section {
+  border: 1px solid rgba(172, 214, 201, 0.2);
+  border-radius: 14px;
+  background: rgba(18, 28, 27, 0.5);
+  padding: 16px 18px;
+}
+
+.sectionTitle {
+  margin: 0;
+  color: #f5fffb;
+  font-size: 1.25rem;
+}
+
+.sectionText {
+  margin-top: 8px;
+  margin-bottom: 0;
+  color: #d4e5de;
+  line-height: 1.7;
+}
+
+@media (max-width: 768px) {
+  .page {
+    padding: 36px 14px;
+  }
+
+  .container {
+    padding: 22px;
+    border-radius: 16px;
+  }
+
+  .section {
+    padding: 14px;
+  }
+}

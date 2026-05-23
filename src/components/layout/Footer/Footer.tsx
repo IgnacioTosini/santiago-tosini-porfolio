@@ -1,5 +1,6 @@
 "use client";
 
+import Link from 'next/link';
 import { useEffect, useRef } from 'react';
 import gsap from 'gsap';
 import { IoLogoInstagram, IoLogoYoutube } from 'react-icons/io';
@@ -24,7 +25,11 @@ export default function Footer() {
     <footer ref={footerRef} className="footer">
       <div className='footerContent'>
         <div className='footerContentInfo'>
-          <h1>© 2026 Santi Tosini. Todos los derechos reservados.</h1>
+          <h1>© {new Date().getFullYear()} Santi Tosini. Todos los derechos reservados.</h1>
+          <div className='footerLegalLinks'>
+            <Link href="/privacy">Política de Privacidad</Link>
+            <Link href="/terms">Términos de Servicio</Link>
+          </div>
         </div>
 
         <div className='footerContentInfoLinks'>
