@@ -1,12 +1,12 @@
 'use client';
 
-import { useEffect, useRef } from 'react';
-import gsap from 'gsap';
+import { useRef } from 'react';
 import { Title } from '@/components/ui/Title/Title';
 import { IoLogoTiktok, IoMail } from 'react-icons/io5';
 import { IoLogoInstagram, IoLogoYoutube } from 'react-icons/io';
-import { animateContact } from '@/components/animations/gsap/contactAnimations';
-import { toast } from 'react-toastify';
+import { useGsapAnimation } from '@/hooks/useGsapAnimation';
+import { toast, ToastContainer } from 'react-toastify';
+import 'react-toastify/dist/ReactToastify.css';
 import './_contact.scss';
 
 export const Contact = () => {
@@ -34,14 +34,9 @@ export const Contact = () => {
         }
     };
 
-    useEffect(() => {
-        if (!contactRef.current) return;
-
-        const ctx = gsap.context(() => {
-            animateContact(contactRef.current!);
-        }, contactRef.current);
-
-        return () => ctx.revert();
+    useGsapAnimation(contactRef, async () => {
+        const { animateContact } = await import('@/components/animations/gsap/contactAnimations');
+        return animateContact;
     }, []);
 
     return (
@@ -73,6 +68,7 @@ export const Contact = () => {
                     </button>
                 </div>
             </div>
+            <ToastContainer position="bottom-center" autoClose={2500} hideProgressBar theme="dark" />
         </section>
     )
 }

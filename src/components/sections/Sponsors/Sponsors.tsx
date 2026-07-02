@@ -1,24 +1,18 @@
 "use client";
 
-import { useEffect, useRef } from 'react';
-import gsap from 'gsap';
+import { useRef } from 'react';
 import { Title } from '@/components/ui/Title/Title';
 import { sponsorsData } from '@/mocks/sponsorsData.mock';
 import { SponsorCard } from '@/components/ui/Sponsor/SponsorCard/SponsorCard';
-import { animateSponsors } from '@/components/animations/gsap/sponsorsAnimations';
+import { useGsapAnimation } from '@/hooks/useGsapAnimation';
 import './_sponsors.scss';
 
 export const Sponsors = () => {
     const sponsorsRef = useRef<HTMLElement>(null);
 
-    useEffect(() => {
-        if (!sponsorsRef.current) return;
-
-        const ctx = gsap.context(() => {
-            animateSponsors(sponsorsRef.current!);
-        }, sponsorsRef.current);
-
-        return () => ctx.revert();
+    useGsapAnimation(sponsorsRef, async () => {
+        const { animateSponsors } = await import('@/components/animations/gsap/sponsorsAnimations');
+        return animateSponsors;
     }, []);
 
     return (

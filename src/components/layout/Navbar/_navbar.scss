@@ -16,12 +16,21 @@
     z-index: 1000;
 
     .navbarBrand {
+        display: inline-flex;
+        align-items: center;
+        gap: 10px;
         font-family: $font-family-secondary;
         font-size: $font-size-medium;
         font-weight: $font-weight-bold;
         color: $color-text-primary;
         line-height: 28px;
         text-decoration: none;
+
+        .navbarBrandIcon {
+            border-radius: 999px;
+            border: 1px solid rgba($color-text-tertiary, 0.45);
+            object-fit: cover;
+        }
 
         span {
             color: $color-text-tertiary;
@@ -65,5 +74,15 @@
         background: transparent;
         color: $color-text-tertiary;
         cursor: pointer;
+
+        .hamburgerIcon {
+            display: inline-flex;
+            transform: rotate(0deg);
+            transition: transform 0.24s ease-in-out;
+
+            &.open {
+                transform: rotate(90deg);
+            }
+        }
     }
 }

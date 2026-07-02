@@ -2,17 +2,15 @@
 
 import { QueryClient, QueryClientProvider } from '@tanstack/react-query';
 import { useState } from 'react';
-import { ToastContainer } from 'react-toastify';
-import 'react-toastify/dist/ReactToastify.css';
 
-type ProvidersProps = {
+type SocialDataProviderProps = {
     children: React.ReactNode;
 };
 
 const TWELVE_HOURS_MS = 12 * 60 * 60 * 1000;
 const TWENTY_FOUR_HOURS_MS = 24 * 60 * 60 * 1000;
 
-export function Providers({ children }: ProvidersProps) {
+export function SocialDataProvider({ children }: SocialDataProviderProps) {
     const [queryClient] = useState(
         () =>
             new QueryClient({
@@ -31,7 +29,6 @@ export function Providers({ children }: ProvidersProps) {
     return (
         <QueryClientProvider client={queryClient}>
             {children}
-            <ToastContainer position="bottom-center" autoClose={2500} hideProgressBar theme="dark" />
         </QueryClientProvider>
     );
 }

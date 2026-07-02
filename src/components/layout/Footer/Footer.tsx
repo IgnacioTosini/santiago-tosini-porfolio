@@ -1,24 +1,18 @@
 "use client";
 
 import Link from 'next/link';
-import { useEffect, useRef } from 'react';
-import gsap from 'gsap';
+import { useRef } from 'react';
 import { IoLogoInstagram, IoLogoYoutube } from 'react-icons/io';
-import { animateFooter } from '@/components/animations/gsap/footerAnimations';
 import { IoLogoTiktok } from 'react-icons/io5';
+import { useGsapAnimation } from '@/hooks/useGsapAnimation';
 import './_footer.scss';
 
 export default function Footer() {
   const footerRef = useRef<HTMLElement>(null);
 
-  useEffect(() => {
-    if (!footerRef.current) return;
-
-    const ctx = gsap.context(() => {
-      animateFooter(footerRef.current!);
-    }, footerRef.current);
-
-    return () => ctx.revert();
+  useGsapAnimation(footerRef, async () => {
+    const { animateFooter } = await import('@/components/animations/gsap/footerAnimations');
+    return animateFooter;
   }, []);
 
   return (

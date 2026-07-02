@@ -18,34 +18,40 @@ interface FootballBall {
     seed: number;
 }
 
-const BALL_COUNT = 16;
+const BALL_COUNT = 19;
 
 const randomBetween = (min: number, max: number) => Math.random() * (max - min) + min;
 const clamp = (value: number, min: number, max: number) => Math.min(Math.max(value, min), max);
-const createInitialBalls = () => Array.from({ length: BALL_COUNT }, (_, index) => createRandomBall(index));
 
-const createRandomBall = (id: number): FootballBall => {
-    const viewportTop = window.scrollY;
-    const viewportHeight = window.innerHeight;
+const getDocumentHeight = () => Math.max(
+    document.documentElement.scrollHeight,
+    document.body.scrollHeight,
+    window.innerHeight
+);
+
+const createInitialBalls = () => {
+    const documentHeight = getDocumentHeight();
+    const sectionHeight = documentHeight / BALL_COUNT;
+
+    return Array.from({ length: BALL_COUNT }, (_, index) => {
+        const sectionTop = index * sectionHeight;
+        const top = randomBetween(sectionTop, sectionTop + sectionHeight);
+
+        return createRandomBall(index, top);
+    });
+};
+
+const createRandomBall = (id: number, top: number): FootballBall => {
     const viewportWidth = window.innerWidth;
-    const documentHeight = Math.max(document.documentElement.scrollHeight, viewportTop + viewportHeight);
-    const preferCurrentViewport = Math.random() < 0.84;
-
-    const top = preferCurrentViewport
-        ? clamp(
-            randomBetween(viewportTop - viewportHeight * 0.2, viewportTop + viewportHeight * 1.2),
-            0,
-            Math.max(0, documentHeight - 48)
-        )
-        : randomBetween(0, Math.max(0, documentHeight - 48));
+    const documentHeight = getDocumentHeight();
 
     return {
         id,
         left: randomBetween(viewportWidth * 0.04, viewportWidth * 0.96),
-        top,
+        top: clamp(top, 0, Math.max(0, documentHeight - 48)),
         size: Math.random() * 34 + 28,
         duration: Math.random() * 3 + 6,
-        delay: Math.random() * 0.8,
+        delay: randomBetween(-9, 0),
         opacity: Math.random() * 0.24 + 0.32,
         driftX: (Math.random() - 0.5) * 16,
         driftY: (Math.random() - 0.5) * 14,
@@ -62,28 +68,8 @@ export const FootballBackground = () => {
             setBalls(createInitialBalls());
         }, 0);
 
-        const interval = window.setInterval(() => {
-            setBalls((previousBalls) => {
-                if (previousBalls.length === 0) return previousBalls;
-
-                const firstBallToUpdate = Math.floor(Math.random() * previousBalls.length);
-                let secondBallToUpdate = Math.floor(Math.random() * previousBalls.length);
-
-                if (previousBalls.length > 1 && secondBallToUpdate === firstBallToUpdate) {
-                    secondBallToUpdate = (secondBallToUpdate + 1) % previousBalls.length;
-                }
-
-                return previousBalls.map((ball, index) => (
-                    index === firstBallToUpdate || index === secondBallToUpdate
-                        ? createRandomBall(ball.id)
-                        : ball
-                ));
-            });
-        }, 1100);
-
         return () => {
             window.clearTimeout(timeout);
-            window.clearInterval(interval);
         };
     }, []);
 

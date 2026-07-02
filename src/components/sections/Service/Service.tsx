@@ -1,26 +1,20 @@
 "use client";
 
-import { useEffect, useRef } from 'react';
-import gsap from 'gsap';
+import { useRef } from 'react';
 import { Title } from '@/components/ui/Title/Title';
 import { ServiceCard } from '@/components/ui/Service/ServiceCard/ServiceCard';
 import { FaFilm } from 'react-icons/fa';
 import { IoMdPhonePortrait } from 'react-icons/io';
 import { IoCameraOutline } from 'react-icons/io5';
-import { animateService } from '@/components/animations/gsap/serviceAnimations';
+import { useGsapAnimation } from '@/hooks/useGsapAnimation';
 import './_service.scss';
 
 export const Service = () => {
     const serviceRef = useRef<HTMLElement>(null);
 
-    useEffect(() => {
-        if (!serviceRef.current) return;
-
-        const ctx = gsap.context(() => {
-            animateService(serviceRef.current!);
-        }, serviceRef.current);
-
-        return () => ctx.revert();
+    useGsapAnimation(serviceRef, async () => {
+        const { animateService } = await import('@/components/animations/gsap/serviceAnimations');
+        return animateService;
     }, []);
 
     return (

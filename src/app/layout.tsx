@@ -3,8 +3,6 @@ import { Inter, Space_Grotesk } from "next/font/google";
 import Navbar from "@/components/layout/Navbar/Navbar";
 import Footer from "@/components/layout/Footer/Footer";
 import { FootballBackground } from "@/components/decor/FootballBackground";
-import { initializeServer } from "@/lib/server-init";
-import { Providers } from "./providers";
 import { Analytics } from "@vercel/analytics/next";
 import "./globals.css";
 
@@ -83,6 +81,7 @@ export const metadata: Metadata = {
   },
   icons: {
     icon: "/fotoPerfilSantiTosini.jpeg",
+    shortcut: "/fotoPerfilSantiTosini.jpeg",
     apple: "/fotoPerfilSantiTosini.jpeg",
   },
 };
@@ -92,18 +91,14 @@ export default async function RootLayout({
 }: Readonly<{
   children: React.ReactNode;
 }>) {
-  await initializeServer();
-
   return (
     <html lang="es" className={`${inter.variable} ${spaceGrotesk.variable}`}>
       <body>
-        <Providers>
-          <FootballBackground />
-          <Navbar />
-          {children}
-          <Footer />
-          <Analytics />
-        </Providers>
+        <FootballBackground />
+        <Navbar />
+        {children}
+        <Footer />
+        <Analytics />
       </body>
     </html>
   );

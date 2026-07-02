@@ -7,6 +7,7 @@ import { Numbers } from "@/components/sections/Numbers/Numbers";
 import { Service } from "@/components/sections/Service/Service";
 import { Sponsors } from "@/components/sections/Sponsors/Sponsors";
 import { Timeline } from "@/components/sections/Timeline/Timeline";
+import { SocialDataProvider } from "./providers";
 
 const DEFAULT_SITE_URL = "https://santiagotosini.com";
 const SITE_URL = process.env.NEXT_PUBLIC_SITE_URL ?? DEFAULT_SITE_URL;
@@ -51,8 +52,10 @@ export default function Home() {
       <Hero />
       <Timeline />
       <About />
-      <Numbers />
-      <Audience />
+      <SocialDataProvider>
+        <Numbers />
+        <Audience />
+      </SocialDataProvider>
       <Service />
       <Sponsors />
       <Contact />

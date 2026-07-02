@@ -1,28 +1,25 @@
 'use client';
 
 import Link from 'next/link';
-import { useEffect, useRef } from 'react';
-import gsap from 'gsap';
+import { useRef } from 'react';
 import { IoPlayOutline } from 'react-icons/io5';
 import Image from 'next/image';
 import { IoLogoInstagram } from 'react-icons/io';
-import { animateHeroEntrance, animateHeroParallax } from '@/components/animations/gsap/heroAnimations';
 import { FootballDecor } from '@/components/decor/FootballDecor';
 import { instagramFollowers } from '@/mocks/instagramData.mock';
+import { useGsapAnimation } from '@/hooks/useGsapAnimation';
 import './_hero.scss';
 
 export const Hero = () => {
     const heroRef = useRef<HTMLElement>(null);
 
-    useEffect(() => {
-        if (!heroRef.current) return;
+    useGsapAnimation(heroRef, async () => {
+        const { animateHeroEntrance, animateHeroParallax } = await import('@/components/animations/gsap/heroAnimations');
 
-        const ctx = gsap.context(() => {
-            animateHeroEntrance(heroRef.current!);
-            animateHeroParallax(heroRef.current!);
-        }, heroRef.current);
-
-        return () => ctx.revert();
+        return (container) => {
+            animateHeroEntrance(container);
+            animateHeroParallax(container);
+        };
     }, []);
 
     const smoothScroll = (event: React.MouseEvent<HTMLAnchorElement, MouseEvent>) => {
@@ -74,7 +71,7 @@ export const Hero = () => {
                 </div>
                 <div className="heroContentFooter">
                     <div className='imageContainer'>
-                        <Image src="/fotoPerfilSantiTosini.jpeg" alt="Santi Tosini" width={400} height={650} className='heroImage' />
+                        <Image src="/fotoPerfilSantiTosini.jpeg" alt="Santi Tosini" width={400} height={650} className='heroImage' priority />
                         <div id='sym:instagramOverlay' className='instagramOverlay'>
                             <IoLogoInstagram className='icon' />
                             <div className='instagramDetails'>

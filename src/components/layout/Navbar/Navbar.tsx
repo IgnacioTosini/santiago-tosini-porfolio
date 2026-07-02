@@ -1,42 +1,29 @@
 'use client'
 
 import Link from "next/link";
+import Image from "next/image";
 import { usePathname } from "next/navigation";
 import { MouseEvent, useEffect, useRef, useState } from "react";
-import gsap from 'gsap';
 import { RxHamburgerMenu } from "react-icons/rx";
-import { animateNavbarEntrance } from '@/components/animations/gsap/navbarAnimations';
 import { HamburgerNavbar } from "../HamburgerNavbar/HamburgerNavbar";
 import { IoMdClose } from "react-icons/io";
 import { scrollSection } from '@/utils/scrollSection';
 import { navigationItems } from "@/utils/navigationItems";
+import { useGsapAnimation } from '@/hooks/useGsapAnimation';
 import "./_navbar.scss";
 
 export default function Navbar() {
     const pathname = usePathname()
     const navbarRef = useRef<HTMLElement>(null)
-    const iconRef = useRef<HTMLSpanElement>(null)
     const [isMobile, setIsMobile] = useState(false)
     const [isMenuOpen, setIsMenuOpen] = useState(false)
     const [activeSection, setActiveSection] = useState<string>('')
     const currentSection = pathname === '/' ? activeSection : ''
 
-    useEffect(() => {
-        if (!navbarRef.current) return;
-        const ctx = gsap.context(() => {
-            animateNavbarEntrance(navbarRef.current!);
-        }, navbarRef.current);
-        return () => ctx.revert();
+    useGsapAnimation(navbarRef, async () => {
+        const { animateNavbarEntrance } = await import('@/components/animations/gsap/navbarAnimations');
+        return animateNavbarEntrance;
     }, []);
-
-    useEffect(() => {
-        if (!iconRef.current) return;
-        gsap.to(iconRef.current, {
-            rotate: isMenuOpen ? 90 : 0,
-            duration: 0.24,
-            ease: 'power2.inOut',
-        });
-    }, [isMenuOpen]);
 
     useEffect(() => {
         const handleResize = () => {
@@ -129,7 +116,17 @@ export default function Navbar() {
 
     return (
         <nav ref={navbarRef} className="navbar">
-            <Link href="/" className="navbarBrand" onClick={handleBrandClick}>Santiago<span>Tosini</span></Link>
+            <Link href="/" className="navbarBrand" onClick={handleBrandClick}>
+                <Image
+                    src="/fotoPerfilSantiTosini.jpeg"
+                    alt="Icono Santiago Tosini"
+                    width={34}
+                    height={34}
+                    className="navbarBrandIcon"
+                    priority
+                />
+                Santiago<span>Tosini</span>
+            </Link>
             {isMobile ? (
                 <>
                     <button
@@ -140,7 +137,7 @@ export default function Navbar() {
                         aria-controls="mobile-navigation"
                         onClick={() => setIsMenuOpen((prev) => !prev)}
                     >
-                        <span ref={iconRef}>
+                        <span className={isMenuOpen ? 'hamburgerIcon open' : 'hamburgerIcon'}>
                             {isMenuOpen ? <IoMdClose size={26} /> : <RxHamburgerMenu size={26} />}
                         </span>
                     </button>

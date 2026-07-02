@@ -1,11 +1,10 @@
 'use client';
 
-import { useEffect, useRef } from 'react';
-import gsap from 'gsap';
+import { useRef } from 'react';
 import { FaYoutube } from 'react-icons/fa';
 import { IoArrowForwardOutline } from 'react-icons/io5';
 import { Title } from '@/components/ui/Title/Title';
-import { animateTimeline } from '@/components/animations/gsap/timelineAnimations';
+import { useGsapAnimation } from '@/hooks/useGsapAnimation';
 import './_timeline.scss';
 
 const timelineMoments = [
@@ -44,14 +43,9 @@ const timelineMoments = [
 export const Timeline = () => {
     const timelineRef = useRef<HTMLElement>(null);
 
-    useEffect(() => {
-        if (!timelineRef.current) return;
-
-        const ctx = gsap.context(() => {
-            animateTimeline(timelineRef.current!);
-        }, timelineRef.current);
-
-        return () => ctx.revert();
+    useGsapAnimation(timelineRef, async () => {
+        const { animateTimeline } = await import('@/components/animations/gsap/timelineAnimations');
+        return animateTimeline;
     }, []);
 
     return (

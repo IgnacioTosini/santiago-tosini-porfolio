@@ -58,9 +58,9 @@ const TIKTOK_USER_INFO_URL = 'https://open.tiktokapis.com/v2/user/info/';
 const TIKTOK_VIDEO_LIST_URL = 'https://open.tiktokapis.com/v2/video/list/';
 
 const TIKTOK_FALLBACK_PERFORMANCE_DATA: AudienceDatum[] = [
-    { label: 'Seguidores', value: 197233 },
-    { label: 'Me gusta totales', value: 6319226 },
-    { label: 'Videos', value: 783 },
+    { label: 'Seguidores', value: 212000 },
+    { label: 'Me gusta totales', value: 7000000 },
+    { label: 'Videos', value: 883 },
 ];
 
 async function getTiktokAccessToken(): Promise<string | null> {
@@ -112,6 +112,10 @@ async function fetchTiktokUserInfo(accessToken: string) {
     }
 
     const data = (await response.json()) as TiktokUserInfoResponse;
+    console.log(
+        "TikTok User Info:",
+        JSON.stringify(data, null, 2)
+    );
 
     if (data.error?.code && data.error.code !== 'ok') {
         throw new Error(`TikTok user info error: ${data.error.code} - ${data.error.message}`);
@@ -159,6 +163,10 @@ async function fetchTiktokVideos(accessToken: string): Promise<TiktokVideoItem[]
     }
 
     const data = (await response.json()) as TiktokVideoListResponse;
+    console.log(
+        "TikTok Videos:",
+        JSON.stringify(data, null, 2)
+    );
 
     if (data.error?.code && data.error.code !== 'ok') {
         throw new Error(`TikTok video list error: ${data.error.code} - ${data.error.message}`);
@@ -170,6 +178,7 @@ async function fetchTiktokVideos(accessToken: string): Promise<TiktokVideoItem[]
 export async function getTiktokTopVideoCard() {
     try {
         const accessToken = await getTiktokAccessToken();
+        console.log('TikTok Access Token:', accessToken ? 'Obtained' : 'Not available');
 
         if (!accessToken) {
             return null;
@@ -196,7 +205,8 @@ export async function getTiktokTopVideoCard() {
             },
             isLive: true,
         };
-    } catch {
+    } catch (error) {
+        console.error('Error fetching TikTok top video:', error);
         return null;
     }
 }
@@ -230,6 +240,7 @@ export async function getTiktokPerformanceData() {
 
         return { performanceData, source, message };
     } catch (error) {
+        console.error('Error fetching TikTok performance data:', error);
         return {
             performanceData,
             source,

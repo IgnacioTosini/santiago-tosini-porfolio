@@ -1,15 +1,14 @@
 "use client";
 
-import { useEffect, useRef } from 'react';
-import gsap from 'gsap';
+import { useRef } from 'react';
 import { PlatformAudienceSection } from '@/components/sections/Audience/PlatformAudienceSection';
 import { tiktokAgeData, tiktokGenderData, tiktokLocationData, tiktokTrafficData } from '@/mocks/tiktokData.mock';
 import { instagramInterestData } from '@/mocks/instagramData.mock';
 import { useYoutubeAudienceData } from '@/hooks/useYoutubeAudienceData';
 import { useTiktokAudienceData } from '@/hooks/useTiktokAudienceData';
 import { useInstagramAudienceData } from '@/hooks/useInstagramAudienceData';
-import { animateAudience } from '@/components/animations/gsap/audienceAnimations';
 import type { AudienceDatum } from '@/types/audience.types';
+import { useGsapAnimation } from '@/hooks/useGsapAnimation';
 import './_audience.scss';
 
 type AudienceCardConfig = {
@@ -156,14 +155,9 @@ export const Audience = () => {
         },
     ];
 
-    useEffect(() => {
-        if (!audienceRef.current) return;
-
-        const ctx = gsap.context(() => {
-            animateAudience(audienceRef.current!);
-        }, audienceRef.current);
-
-        return () => ctx.revert();
+    useGsapAnimation(audienceRef, async () => {
+        const { animateAudience } = await import('@/components/animations/gsap/audienceAnimations');
+        return animateAudience;
     }, [audienceAnimationSeed]);
 
     return (

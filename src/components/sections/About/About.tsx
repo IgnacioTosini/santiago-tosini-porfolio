@@ -1,24 +1,18 @@
 "use client";
 
-import { useEffect, useRef } from 'react';
-import gsap from 'gsap';
+import { useRef } from 'react';
 import { Title } from '@/components/ui/Title/Title';
 import { FaFire, FaGraduationCap, FaMapMarkerAlt } from 'react-icons/fa';
 import { AboutCard } from '@/components/ui/About/AboutCard/AboutCard';
-import { animateAbout } from '@/components/animations/gsap/aboutAnimations';
+import { useGsapAnimation } from '@/hooks/useGsapAnimation';
 import './_about.scss';
 
 export const About = () => {
     const aboutRef = useRef<HTMLElement>(null);
 
-    useEffect(() => {
-        if (!aboutRef.current) return;
-
-        const ctx = gsap.context(() => {
-            animateAbout(aboutRef.current!);
-        }, aboutRef.current);
-
-        return () => ctx.revert();
+    useGsapAnimation(aboutRef, async () => {
+        const { animateAbout } = await import('@/components/animations/gsap/aboutAnimations');
+        return animateAbout;
     }, []);
 
     return (

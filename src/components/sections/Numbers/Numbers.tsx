@@ -1,28 +1,22 @@
 'use client';
 
-import { useEffect, useRef } from 'react';
-import gsap from 'gsap';
+import { useRef } from 'react';
 import { Title } from '@/components/ui/Title/Title';
 import { NumbersCard } from '@/components/ui/Numbers/NumbersCard/NumbersCard';
 import { IoLogoTiktok } from 'react-icons/io5';
 import { IoLogoInstagram, IoLogoYoutube } from 'react-icons/io';
 import { useYoutubeData } from '@/hooks/useYoutubeData';
 import { useTiktokAudienceData } from '@/hooks/useTiktokAudienceData';
-import { animateNumbers } from '@/components/animations/gsap/numbersAnimations';
 import { instagramFollowers } from '@/mocks/instagramData.mock';
+import { useGsapAnimation } from '@/hooks/useGsapAnimation';
 import './_numbers.scss';
 
 export const Numbers = () => {
     const numbersRef = useRef<HTMLElement>(null);
 
-    useEffect(() => {
-        if (!numbersRef.current) return;
-
-        const ctx = gsap.context(() => {
-            animateNumbers(numbersRef.current!);
-        }, numbersRef.current);
-
-        return () => ctx.revert();
+    useGsapAnimation(numbersRef, async () => {
+        const { animateNumbers } = await import('@/components/animations/gsap/numbersAnimations');
+        return animateNumbers;
     }, []);
 
     const { subscriberCount } = useYoutubeData();

@@ -77,6 +77,31 @@
   line-height: 1.7;
 }
 
+.sectionList {
+  margin: 10px 0 0;
+  padding-left: 22px;
+  color: #d4e5de;
+}
+
+.sectionListItem {
+  margin-bottom: 8px;
+  line-height: 1.65;
+}
+
+.sectionListItem:last-child {
+  margin-bottom: 0;
+}
+
+.link {
+  color: #aee6d5;
+  text-decoration: underline;
+  text-underline-offset: 3px;
+}
+
+.link:hover {
+  color: #d4fff2;
+}
+
 @media (max-width: 768px) {
   .page {
     padding: 36px 14px;

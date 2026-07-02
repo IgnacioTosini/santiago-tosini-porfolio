@@ -3,8 +3,7 @@
 import { useEffect, useRef, useState } from 'react';
 import type { MouseEvent } from 'react';
 import Link from 'next/link';
-import gsap from 'gsap';
-import { animateMenuOpen } from '@/components/animations/gsap/hamburgerNavbarAnimations';
+import { useGsapAnimation } from '@/hooks/useGsapAnimation';
 import { navigationItems } from '@/utils/navigationItems';
 import './_hamburgerNavbar.scss';
 
@@ -23,13 +22,11 @@ export const HamburgerNavbar = ({ id, isOpen, onSectionClick, activeSection }: H
         setMenuActiveSection(activeSection);
     }, [activeSection]);
 
-    // Run animation when the menu div actually mounts (isOpen becomes true)
-    useEffect(() => {
-        if (!isOpen || !menuRef.current) return;
-        const ctx = gsap.context(() => {
-            animateMenuOpen(menuRef.current!);
-        }, menuRef.current);
-        return () => ctx.revert();
+    useGsapAnimation(menuRef, async () => {
+        if (!isOpen) return () => undefined;
+
+        const { animateMenuOpen } = await import('@/components/animations/gsap/hamburgerNavbarAnimations');
+        return animateMenuOpen;
     }, [isOpen]);
 
     useEffect(() => {
