@@ -5,7 +5,7 @@ const CONTACT_EMAIL = process.env.NEXT_PUBLIC_CONTACT_EMAIL || 'legal@santiagoto
 
 export const metadata: Metadata = {
     title: 'Términos de Servicio',
-    description: 'Términos de servicio de Santiago Tosini Media Kit para uso de contenido e integraciones.',
+    description: 'Términos de servicio de Santiago Tosini para uso de contenido e integraciones.',
     alternates: {
         canonical: '/terms',
     },
@@ -19,7 +19,7 @@ export default function TermsPage() {
                 <h1 className={styles.title}>Términos de Servicio</h1>
                 <p className={styles.meta}>Última actualización: 2 de julio de 2026</p>
                 <p className={styles.lead}>
-                    Estos términos regulan el uso de la aplicación <strong>Santiago Tosini Media Kit</strong>, disponible
+                    Estos términos regulan el uso de la aplicación <strong>Santiago Tosini</strong>, disponible
                     en https://www.santiagotosini.com.
                 </p>
 
@@ -35,7 +35,7 @@ export default function TermsPage() {
                     <section className={styles.section}>
                         <h2 className={styles.sectionTitle}>2. Descripción del servicio</h2>
                         <p className={styles.sectionText}>
-                            Santiago Tosini Media Kit muestra información pública y métricas de redes sociales para
+                            Santiago Tosini muestra información pública y métricas de redes sociales para
                             fines informativos, comerciales y de análisis de performance de contenido.
                         </p>
                     </section>

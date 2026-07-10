@@ -13,14 +13,14 @@ const DEFAULT_SITE_URL = "https://santiagotosini.com";
 const SITE_URL = process.env.NEXT_PUBLIC_SITE_URL ?? DEFAULT_SITE_URL;
 
 export const metadata: Metadata = {
-  title: "Santiago Tosini | Portfolio Oficial",
+  title: "Santiago Tosini",
   description:
     "Conocé a Santiago Tosini: contenido deportivo, métricas de audiencia y oportunidades de colaboración.",
   alternates: {
     canonical: "/",
   },
   openGraph: {
-    title: "Santiago Tosini | Portfolio Oficial",
+    title: "Santiago Tosini",
     description:
       "Contenido destacado, métricas de audiencia y servicios de colaboración.",
     url: "/",

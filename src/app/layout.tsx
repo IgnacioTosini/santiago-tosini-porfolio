@@ -22,7 +22,7 @@ const spaceGrotesk = Space_Grotesk({
 export const metadata: Metadata = {
   metadataBase: new URL(SITE_URL),
   title: {
-    default: "Santiago Tosini | Creador de Contenido",
+    default: "Santiago Tosini",
     template: "%s | Santiago Tosini",
   },
   description:
@@ -48,7 +48,7 @@ export const metadata: Metadata = {
     type: "website",
     locale: "es_AR",
     url: "/",
-    title: "Santiago Tosini | Creador de Contenido",
+    title: "Santiago Tosini",
     description:
       "Conocé el trabajo, las métricas y los servicios de Santiago Tosini en redes sociales.",
     siteName: "Santiago Tosini",
@@ -63,7 +63,7 @@ export const metadata: Metadata = {
   },
   twitter: {
     card: "summary_large_image",
-    title: "Santiago Tosini | Creador de Contenido",
+    title: "Santiago Tosini",
     description:
       "Portfolio oficial con métricas y contenido destacado de Santiago Tosini.",
     images: ["/fotoPerfilSantiTosini.jpeg"],

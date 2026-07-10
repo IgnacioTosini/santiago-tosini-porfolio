@@ -5,7 +5,7 @@ const CONTACT_EMAIL = process.env.NEXT_PUBLIC_CONTACT_EMAIL || 'legal@santiagoto
 
 export const metadata: Metadata = {
     title: 'Política de Privacidad',
-    description: 'Política de privacidad de Santiago Tosini Media Kit y tratamiento de datos de integraciones sociales.',
+    description: 'Política de privacidad de Santiago Tosini y tratamiento de datos de integraciones sociales.',
     alternates: {
         canonical: '/privacy',
     },
@@ -19,7 +19,7 @@ export default function PrivacyPage() {
                 <h1 className={styles.title}>Política de Privacidad</h1>
                 <p className={styles.meta}>Última actualización: 2 de julio de 2026</p>
                 <p className={styles.lead}>
-                    Esta política aplica a la aplicación <strong>Santiago Tosini Media Kit</strong>, disponible en
+                    Esta política aplica a la aplicación <strong>Santiago Tosini</strong>, disponible en
                     https://www.santiagotosini.com.
                 </p>
 

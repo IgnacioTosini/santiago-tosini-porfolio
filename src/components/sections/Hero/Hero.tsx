@@ -39,10 +39,10 @@ export const Hero = () => {
                 </div>}
                 <div className="heroContentHeader">
                     <div className='heroTitleContainer'>
-                        <span>—</span> <h1 className="heroTitle"> Creador de Contenido</h1>
+                        <span>—</span> <h1 className="heroTitle"> Santiago Tosini</h1>
                     </div>
                     <div className='heroSubtitleContainer'>
-                        <p className="heroSubtitle">Santi Tosini — <span>Contenido de fútbol</span> que conecta con millones</p>
+                        <p className="heroSubtitle">Creador de contenido — <span>fútbol</span> que conecta con millones</p>
                     </div>
                     <p className='heroLead'>+1M seguidores • Reels virales • Contenido real en la calle</p>
                     <p className='heroDescription'>Creo contenido de fútbol que combina entretenimiento, espontaneidad e interacción con la audiencia.</p>
