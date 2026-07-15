@@ -58,8 +58,8 @@ const TIKTOK_USER_INFO_URL = 'https://open.tiktokapis.com/v2/user/info/';
 const TIKTOK_VIDEO_LIST_URL = 'https://open.tiktokapis.com/v2/video/list/';
 
 const TIKTOK_FALLBACK_PERFORMANCE_DATA: AudienceDatum[] = [
-    { label: 'Seguidores', value: 212000 },
-    { label: 'Me gusta totales', value: 7000000 },
+    { label: 'Seguidores', value: 214000 },
+    { label: 'Me gusta totales', value: 7300000 },
     { label: 'Videos', value: 883 },
 ];
 
