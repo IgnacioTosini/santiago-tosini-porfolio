@@ -19,14 +19,8 @@ type TiktokAudienceState = {
     error: string | null;
 };
 
-const defaultPerformanceData: AudienceDatum[] = [
-    { label: 'Seguidores', value: 214000 },
-    { label: 'Me gusta totales', value: 7300000 },
-    { label: 'Videos', value: 883 },
-];
-
 const defaultTiktokAudienceState: TiktokAudienceState = {
-    performanceData: defaultPerformanceData,
+    performanceData: [],
     source: 'fallback',
     error: null,
 };
@@ -42,9 +36,11 @@ async function fetchTiktokAudienceData(): Promise<TiktokAudienceState> {
         const data = (await response.json()) as TiktokPerformanceResponse;
 
         return {
-            performanceData: data.performanceData ?? defaultPerformanceData,
+            performanceData: data.performanceData ?? [],
             source: data.source ?? 'fallback',
-            error: null,
+            error: data.source === 'fallback'
+                ? data.message ?? 'No hay métricas actualizadas de TikTok disponibles.'
+                : null,
         };
     } catch (err) {
         return {

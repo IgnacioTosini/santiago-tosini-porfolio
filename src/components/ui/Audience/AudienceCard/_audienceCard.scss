@@ -66,6 +66,14 @@
             background-color: color.adjust($color-border, $lightness: -10%);
         }
 
+        .audienceBarEmpty {
+            margin: auto 0;
+            text-align: center;
+            font-family: $font-family-primary;
+            font-size: $font-size-small;
+            color: $color-text-secondary;
+        }
+
         .audienceBarItem {
             display: flex;
             flex-direction: column;

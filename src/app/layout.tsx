@@ -26,7 +26,7 @@ export const metadata: Metadata = {
     template: "%s | Santiago Tosini",
   },
   description:
-    "Portfolio oficial de Santiago Tosini, creador de contenido argentino con +100k en Instagram, +200k en TikTok y +430k en YouTube.",
+    "Portfolio oficial de Santiago Tosini, creador de contenido argentino con presencia en Instagram, TikTok y YouTube.",
   keywords: [
     "Santiago Tosini",
     "creador de contenido",

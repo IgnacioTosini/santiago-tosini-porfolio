@@ -58,4 +58,4 @@ Consultar estos endpoints no inicia el scraper ni genera un nuevo resultado fact
 - Una ejecución semanal.
 - Las visitas al portfolio leen solamente los campos necesarios del último resultado exitoso y no ejecutan el scraper.
 
-Si Apify no tiene todavía una ejecución exitosa o devuelve un error, el sitio conserva las métricas fallback existentes.
+Si Apify no tiene todavía una ejecución exitosa o devuelve un error, el sitio muestra que no hay datos disponibles en lugar de publicar cifras antiguas.

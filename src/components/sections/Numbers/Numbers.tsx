@@ -20,15 +20,23 @@ export const Numbers = () => {
     }, []);
 
     const { subscriberCount } = useYoutubeData();
-    const { performanceData: tiktokPerformanceData } = useTiktokAudienceData();
+    const {
+        performanceData: tiktokPerformanceData,
+        loading: tiktokLoading,
+    } = useTiktokAudienceData();
     const youtubeTitle = subscriberCount > 0
         ? (subscriberCount >= 1000
             ? `+${(subscriberCount / 1000).toFixed(0)}k`
             : `+${subscriberCount}`)
         : '+425k';
-    const tiktokFollowers = tiktokPerformanceData && tiktokPerformanceData.length > 0
-        ? `+${(tiktokPerformanceData[0].value / 1000).toFixed(0)}k`
-        : '+200k'; // Valor por defecto si no se pueden cargar los datos de TikTok
+    const tiktokFollowerCount = tiktokPerformanceData
+        .find((item) => item.label === 'Seguidores')
+        ?.value;
+    const tiktokFollowers = tiktokLoading
+        ? '...'
+        : tiktokFollowerCount !== undefined
+            ? `+${(tiktokFollowerCount / 1000).toFixed(0)}k`
+            : '—';
 
     return (
         <section ref={numbersRef} className='numbers' id='social'>

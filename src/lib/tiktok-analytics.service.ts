@@ -8,11 +8,7 @@ type AudienceDatum = {
     value: number;
 };
 
-const TIKTOK_FALLBACK_PERFORMANCE_DATA: AudienceDatum[] = [
-    { label: 'Seguidores', value: 214000 },
-    { label: 'Me gusta totales', value: 7300000 },
-    { label: 'Videos', value: 883 },
-];
+const EMPTY_TIKTOK_PERFORMANCE_DATA: AudienceDatum[] = [];
 
 function truncateTiktokTitle(description: string) {
     const text = description.trim() || 'TikTok destacado';
@@ -55,7 +51,7 @@ export async function getTiktokPerformanceData() {
 
     if (!apifyConfigured) {
         return {
-            performanceData: TIKTOK_FALLBACK_PERFORMANCE_DATA,
+            performanceData: EMPTY_TIKTOK_PERFORMANCE_DATA,
             source: 'fallback' as const,
             provider: 'fallback' as const,
             apifyConfigured,
@@ -68,7 +64,7 @@ export async function getTiktokPerformanceData() {
 
         if (!apifyItem) {
             return {
-                performanceData: TIKTOK_FALLBACK_PERFORMANCE_DATA,
+                performanceData: EMPTY_TIKTOK_PERFORMANCE_DATA,
                 source: 'fallback' as const,
                 provider: 'fallback' as const,
                 apifyConfigured,
@@ -90,7 +86,7 @@ export async function getTiktokPerformanceData() {
         console.error('Error fetching TikTok performance data from Apify:', error);
 
         return {
-            performanceData: TIKTOK_FALLBACK_PERFORMANCE_DATA,
+            performanceData: EMPTY_TIKTOK_PERFORMANCE_DATA,
             source: 'fallback' as const,
             provider: 'fallback' as const,
             apifyConfigured,
