@@ -16,6 +16,10 @@ export const AUDIENCE_CACHE_HEADERS = {
     'Cache-Control': 'public, s-maxage=900, stale-while-revalidate=3600',
 };
 
+export const TIKTOK_CACHE_HEADERS = {
+    'Cache-Control': 'public, s-maxage=3600, stale-while-revalidate=604800',
+};
+
 export const YOUTUBE_AUDIENCE_CACHE_HEADERS = {
     'Cache-Control': 'public, s-maxage=43200, stale-while-revalidate=86400',
 };

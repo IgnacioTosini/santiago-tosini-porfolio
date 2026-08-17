@@ -32,6 +32,10 @@ INSTAGRAM_AUTO_REFRESH=
 TIKTOK_CLIENT_KEY=
 TIKTOK_CLIENT_SECRET=
 TIKTOK_REFRESH_TOKEN=
+APIFY_API_TOKEN=
+APIFY_TIKTOK_USERNAME=santiagotosini
+APIFY_TIKTOK_ACTOR_ID=clockworks~tiktok-profile-scraper
+CRON_SECRET=
 ```
 
 ## Desarrollo
@@ -52,5 +56,8 @@ TIKTOK_REFRESH_TOKEN=
 ## Notas operativas
 
 - Las métricas de YouTube tienen una ruta de sync manual en `src/app/api/youtube/sync/route.ts` protegida por `YOUTUBE_SYNC_SECRET`.
+- TikTok se sincroniza con Apify cada lunes a las 09:00 UTC. La ejecución está limitada a un perfil y un resultado para minimizar el uso del crédito gratuito. Configurá `APIFY_API_TOKEN` y `CRON_SECRET` en Vercel; las variables `APIFY_TIKTOK_USERNAME` y `APIFY_TIKTOK_ACTOR_ID` son opcionales.
+- La ruta protegida `src/app/api/tiktok/sync/route.ts` permite iniciar una sincronización manual enviando `Authorization: Bearer <CRON_SECRET>`.
+- La activación paso a paso está documentada en `APIFY_SETUP.md`.
 - El botón de email de contacto depende de `NEXT_PUBLIC_CONTACT_EMAIL`.
 - Los datos de audiencia usan React Query y muestran fallback cuando una API externa no está disponible.

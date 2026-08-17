@@ -71,7 +71,14 @@ export const Hero = () => {
                 </div>
                 <div className="heroContentFooter">
                     <div className='imageContainer'>
-                        <Image src="/fotoPerfilSantiTosini.jpeg" alt="Santi Tosini" width={400} height={650} className='heroImage' priority />
+                        <Image
+                            src="/fotoPerfilSantiTosini.jpeg"
+                            alt="Santi Tosini"
+                            fill
+                            sizes="(max-width: 768px) 260px, 400px"
+                            className='heroImage'
+                            priority
+                        />
                         <div id='sym:instagramOverlay' className='instagramOverlay'>
                             <IoLogoInstagram className='icon' />
                             <div className='instagramDetails'>

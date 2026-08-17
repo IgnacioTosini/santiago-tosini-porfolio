@@ -205,11 +205,15 @@
                 position: relative;
                 display: flex;
                 align-items: center;
+                width: 400px;
+                height: 550px;
                 max-width: 400px;
                 overflow: visible;
                 isolation: isolate;
 
                 @media (max-width: 768px) {
+                    width: 260px;
+                    height: 350px;
                     max-width: 260px;
                 }
 
@@ -217,14 +221,8 @@
                     border-radius: $radius-xl;
                     box-shadow: $shadow-card;
                     object-fit: cover;
-                    width: 100%;
-                    max-height: 550px;
                     position: relative;
                     z-index: 1;
-
-                    @media (max-width: 768px) {
-                        max-height: 350px;
-                    }
                 }
 
                 .instagramOverlay {

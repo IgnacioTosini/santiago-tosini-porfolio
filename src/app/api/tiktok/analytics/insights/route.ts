@@ -1,5 +1,5 @@
 import { NextResponse } from 'next/server';
-import { AUDIENCE_CACHE_HEADERS } from '@/lib/cache';
+import { TIKTOK_CACHE_HEADERS } from '@/lib/cache';
 import { getTiktokPerformanceData } from '@/lib/tiktok-analytics.service';
 
 export async function GET() {
@@ -11,7 +11,7 @@ export async function GET() {
                 ...data,
             },
             {
-                headers: AUDIENCE_CACHE_HEADERS,
+                headers: TIKTOK_CACHE_HEADERS,
             }
         );
     } catch (error) {
